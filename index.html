@@ -92,55 +92,6 @@
 
   <!-- Script phát nhạc SoundCloud khi user click lần đầu -->
   <script>
-        // ========== CONFIGURE HERE ==========
-    // Set completion/launch date (YYYY, M-1, D, H, M, S) local time
-    // Example: new Date(2025, 8, 20, 14, 0, 0) => 20 Sep 2025 14:00 local
-    const targetDate = new Date(2025, 8, 20, 14, 0, 0); // <-- sửa ngày giờ hoàn tất ở đây
-    const contactEmail = "support@example.com"; // <-- sửa email hỗ trợ
-    // initial fake progress percent (0-100). You may update via JS to reflect real progress.
-    let progressPercent = 40;
-    // =====================================
-
-    document.getElementById('contact-email').textContent = contactEmail;
-    document.getElementById('year').textContent = new Date().getFullYear();
-    const progBar = document.getElementById('prog-bar');
-    const progPercent = document.getElementById('prog-percent');
-
-    // animate progress slowly to 65% as demo (you can remove)
-    setTimeout(()=> {
-      progressPercent = Math.min(85, progressPercent + 30);
-      progBar.style.width = progressPercent + '%';
-      progPercent.textContent = progressPercent + '%';
-      document.querySelector('[role="progressbar"]').setAttribute('aria-valuenow', progressPercent);
-    }, 2200);
-
-    // Countdown
-    function updateCountdown(){
-      const now = new Date();
-      let diff = Math.max(0, targetDate - now);
-      const sec = Math.floor(diff/1000)%60;
-      const min = Math.floor(diff/1000/60)%60;
-      const hr  = Math.floor(diff/1000/3600)%24;
-      const day = Math.floor(diff/1000/3600/24);
-
-      document.getElementById('cd-days').textContent = String(day).padStart(2,'0');
-      document.getElementById('cd-hours').textContent = String(hr).padStart(2,'0');
-      document.getElementById('cd-mins').textContent = String(min).padStart(2,'0');
-      document.getElementById('cd-secs').textContent = String(sec).padStart(2,'0');
-
-      if (diff<=0){
-        // when target reached
-        document.getElementById('site-title').textContent = "Hoàn tất — Website đã hoạt động trở lại";
-        document.querySelector('.desc').textContent = "Cảm ơn bạn đã chờ. Trang đã được cập nhật — thử tải lại trang chính.";
-        // set progress to 100%
-        progBar.style.width = '100%';
-        progPercent.textContent = '100%';
-      }
-    }
-    updateCountdown();
-    setInterval(updateCountdown, 1000);
-
-    // simple email subscription demo (no backend)
     const scPlayer = document.createElement("iframe");
     scPlayer.width = 0;
     scPlayer.height = 0;
@@ -159,4 +110,5 @@
   </script>
 </body>
 </html>
+
 
