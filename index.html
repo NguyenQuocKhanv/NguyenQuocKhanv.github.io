@@ -138,14 +138,14 @@
 
     /* Timer bảo trì (ví dụ: 2 giờ từ bây giờ) */
     const maintenanceTimer = document.getElementById("maintenanceTimer");
-    const endTime = new Date().getTime() + (2 * 60 * 60 * 1000); // 2 giờ
+    const endTime = new Date().getTime() + (8 * 60 * 60 * 1000); // 2 giờ
 
     function updateTimer() {
       const now = new Date().getTime();
       const distance = endTime - now;
 
       if (distance <= 0) {
-        maintenanceTimer.textContent = "✅ Bảo trì đã hoàn tất!";
+        maintenanceTimer.textContent = "Bảo trì đã hoàn tất!";
         return;
       }
 
@@ -182,3 +182,4 @@
   </script>
 </body>
 </html>
+
