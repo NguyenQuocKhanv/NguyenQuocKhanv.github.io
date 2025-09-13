@@ -175,25 +175,27 @@
     setInterval(updateTimer, 1000);
     updateTimer();
 
-    /* Nhạc SoundCloud phát khi click */
-    const scPlayer = document.createElement("iframe");
-    scPlayer.width = 0;
-    scPlayer.height = 0;
-    scPlayer.style.display = "none";
-    scPlayer.setAttribute("allow", "autoplay");
-    scPlayer.src = "https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/hoa-at-bich/a-y-m-c-remix-tiktok-ver2%3Fsi%3D9ee9bb1d0a4b4c12a0e31746a638e32a&auto_play=true&hide_related=true&show_comments=false&show_user=false&show_reposts=false&show_teaser=false&visual=false";
+    /* Nhạc SoundCloud phát khi click + lặp */
+const scPlayer = document.createElement("iframe");
+scPlayer.width = 0;
+scPlayer.height = 0;
+scPlayer.style.display = "none";
+scPlayer.setAttribute("allow", "autoplay");
+scPlayer.src = "https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/hoa-at-bich/a-y-m-c-remix-tiktok-ver2%3Fsi%3D9ee9bb1d0a4b4c12a0e31746a638e32a&auto_play=true&loop=true&hide_related=true&show_comments=false&show_user=false&show_reposts=false&show_teaser=false&visual=false";
 
-    function enableMusic() {
-      if (!document.body.contains(scPlayer)) {
-        document.body.appendChild(scPlayer);
-      }
-      document.removeEventListener("click", enableMusic);
-    }
+function enableMusic() {
+  if (!document.body.contains(scPlayer)) {
+    document.body.appendChild(scPlayer);
+  }
+  document.removeEventListener("click", enableMusic);
+}
 
-    document.addEventListener("click", enableMusic);
+document.addEventListener("click", enableMusic);
+
   </script>
 </body>
 </html>
+
 
 
 
