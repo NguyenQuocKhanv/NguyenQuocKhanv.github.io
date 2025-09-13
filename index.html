@@ -1,1 +1,337 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Site đang bảo trì — Sớm trở lại</title>
+  <meta name="description" content="Trang web hiện đang được bảo trì. Chúng tôi sẽ sớm quay lại với nâng cấp mới nhất."/>
+  <!-- Google Font (tùy chọn, nếu muốn offline bạn có thể thay) -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg1: #0f1724;
+      --bg2: #071029;
+      --glass: rgba(255,255,255,0.06);
+      --accent: linear-gradient(90deg,#6EE7B7,#60A5FA 40%,#B794F4);
+      --glass-border: rgba(255,255,255,0.06);
+      --text: #e6eef8;
+      --muted: #9fb3cf;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      color:var(--text);
+      background: radial-gradient(1200px 600px at 10% 10%, rgba(96,165,250,0.08), transparent 6%),
+                  radial-gradient(800px 400px at 90% 90%, rgba(183,148,244,0.06), transparent 6%),
+                  linear-gradient(180deg,var(--bg1),var(--bg2));
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:32px;
+      overflow:hidden;
+    }
 
+    /* animated tech dots */
+    .tech-field{position:fixed; inset:0; pointer-events:none; z-index:0; opacity:0.6;}
+    .grid-dot{
+      position:absolute;
+      width:4px;height:4px;border-radius:50%;
+      background:rgba(255,255,255,0.03);
+      box-shadow: 0 0 8px rgba(96,165,250,0.06);
+      animation: float 8s infinite ease-in-out;
+      transform-origin:center;
+    }
+    @keyframes float{
+      0%{ transform: translateY(0) scale(1)}
+      50%{ transform: translateY(-12px) scale(1.1)}
+      100%{ transform: translateY(0) scale(1)}
+    }
+
+    /* main card */
+    .card{
+      position:relative;
+      z-index:5;
+      width:100%;
+      max-width:980px;
+      border-radius:18px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border: 1px solid var(--glass-border);
+      padding:28px;
+      display:grid;
+      grid-template-columns: 1fr 360px;
+      gap:24px;
+      backdrop-filter: blur(8px) saturate(120%);
+      box-shadow: 0 10px 40px rgba(2,6,23,0.6);
+      overflow:hidden;
+    }
+    @media (max-width:880px){
+      .card{ grid-template-columns: 1fr; padding:20px; }
+    }
+
+    /* left */
+    .left h1{
+      margin:0 0 6px 0;
+      font-size: clamp(20px,3vw,28px);
+      letter-spacing: -0.02em;
+    }
+    .tagline{
+      display:inline-block;
+      font-weight:600;
+      font-size:12px;
+      padding:6px 10px;
+      background: linear-gradient(90deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+      border-radius:999px;
+      color:var(--muted);
+      margin-bottom:14px;
+    }
+    .desc{ color:var(--muted); line-height:1.55; margin-top:10px; }
+
+    .countdown{
+      display:flex;
+      gap:10px;
+      margin-top:18px;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+    .countdown .unit{
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border:1px solid rgba(255,255,255,0.03);
+      padding:12px 14px;
+      border-radius:10px;
+      text-align:center;
+      min-width:72px;
+    }
+    .unit .num{ font-weight:800; font-size:20px; display:block; }
+    .unit .lbl{ font-size:11px; color:var(--muted); margin-top:4px; }
+
+    /* right (aside) */
+    .aside{
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border-radius:12px;
+      padding:18px;
+      border:1px solid rgba(255,255,255,0.03);
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      align-items:stretch;
+      justify-content:space-between;
+    }
+    .logo-row{ display:flex; gap:12px; align-items:center; }
+    .logo{
+      width:56px;height:56px;display:grid;place-items:center;border-radius:12px;
+      background: linear-gradient(135deg, rgba(96,165,250,0.14), rgba(183,148,244,0.12));
+      border:1px solid rgba(255,255,255,0.03);
+      flex-shrink:0;
+    }
+    .small{ color:var(--muted); font-size:13px; }
+
+    .progress-wrap{ margin-top:6px; }
+    .progress{
+      height:10px;border-radius:999px;background:rgba(255,255,255,0.03); overflow:hidden;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.02);
+    }
+    .progress > i{
+      display:block;height:100%; width:40%; background: var(--accent); background-clip:padding-box;
+      transform-origin:left; transition: width 800ms cubic-bezier(.2,.9,.25,1);
+      box-shadow: 0 6px 18px rgba(99,102,241,0.12);
+    }
+    .meta{ font-size:13px; color:var(--muted); display:flex; justify-content:space-between; align-items:center; margin-top:8px;}
+
+    /* form */
+    .email-form{ display:flex; gap:8px; margin-top:8px; }
+    .email-form input{
+      flex:1;padding:10px 12px;border-radius:10px;border:1px solid rgba(255,255,255,0.04);
+      background:transparent;color:var(--text);outline:none;font-size:14px;
+    }
+    .btn{
+      background:var(--accent);
+      -webkit-background-clip: text; background-clip:text;
+      color:transparent; /* text will be filled by gradient using hack */
+      padding:10px 14px;border-radius:10px;border:none; cursor:pointer;
+      background-image: linear-gradient(90deg,#6EE7B7,#60A5FA 40%,#B794F4);
+      color: white;
+      font-weight:700;
+      box-shadow: 0 8px 20px rgba(96,165,250,0.12);
+    }
+
+    .socials{ display:flex; gap:12px; margin-top:10px; }
+    .socials a{ display:inline-grid; place-items:center; width:38px;height:38px;border-radius:8px;
+                border:1px solid rgba(255,255,255,0.03); background:rgba(255,255,255,0.01); text-decoration:none; color:var(--muted);}
+
+    footer.small{ text-align:center; margin-top:16px; font-size:12px; color:var(--muted); }
+
+    /* subtle animated gradient over card */
+    .shine{
+      position:absolute; inset: -40% -20% -40% -20%;
+      background: radial-gradient(400px 200px at 20% 20%, rgba(96,165,250,0.08), transparent 10%),
+                  radial-gradient(300px 150px at 80% 80%, rgba(183,148,244,0.06), transparent 10%);
+      mix-blend-mode:screen; pointer-events:none; z-index:2;
+      animation: slow-rotate 12s linear infinite;
+      transform-origin:center;
+    }
+    @keyframes slow-rotate{ from{ transform: rotate(0deg) } to{ transform: rotate(360deg) } }
+
+    /* small accessibility */
+    a:focus, button:focus, input:focus{ outline:3px solid rgba(99,102,241,0.12); outline-offset:2px; border-radius:8px; }
+  </style>
+</head>
+<body>
+  <div class="tech-field" aria-hidden="true">
+    <!-- random dots for depth -->
+    <div class="grid-dot" style="left:6%;top:12%; animation-duration:7s"></div>
+    <div class="grid-dot" style="left:18%;top:78%; animation-duration:9s"></div>
+    <div class="grid-dot" style="left:28%;top:48%; animation-duration:6.5s"></div>
+    <div class="grid-dot" style="left:44%;top:22%; animation-duration:11s"></div>
+    <div class="grid-dot" style="left:62%;top:64%; animation-duration:8.5s"></div>
+    <div class="grid-dot" style="left:78%;top:10%; animation-duration:10s"></div>
+    <div class="grid-dot" style="left:86%;top:48%; animation-duration:12s"></div>
+  </div>
+
+  <main class="card" role="main" aria-labelledby="site-title">
+    <div class="left">
+      <div class="tagline">BẢO TRÌ & NÂNG CẤP</div>
+      <h1 id="site-title">Chúng tôi đang cập nhật hệ thống — sắp quay lại</h1>
+      <p class="desc">Xin lỗi vì sự bất tiện — đội ngũ đang triển khai bản cập nhật lớn để cải thiện tốc độ, bảo mật và trải nghiệm người dùng. Cảm ơn bạn đã kiên nhẫn.</p>
+
+      <div class="countdown" aria-live="polite" aria-atomic="true">
+        <div class="unit" aria-label="ngày"><span class="num" id="cd-days">--</span><span class="lbl">Ngày</span></div>
+        <div class="unit" aria-label="giờ"><span class="num" id="cd-hours">--</span><span class="lbl">Giờ</span></div>
+        <div class="unit" aria-label="phút"><span class="num" id="cd-mins">--</span><span class="lbl">Phút</span></div>
+        <div class="unit" aria-label="giây"><span class="num" id="cd-secs">--</span><span class="lbl">Giây</span></div>
+      </div>
+
+      <div style="margin-top:18px;">
+        <small class="small">Mẹo: Nếu cần truy cập khẩn cấp, liên hệ: <strong id="contact-email">support@example.com</strong></small>
+      </div>
+
+      <footer class="small" aria-hidden="true">© <span id="year"></span> YourCompany — Đã ghi nhận hoạt động bảo trì.</footer>
+    </div>
+
+    <aside class="aside" aria-labelledby="aside-title">
+      <div>
+        <div class="logo-row">
+          <div class="logo" aria-hidden="true">
+            <!-- simple techy SVG logo -->
+            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <rect x="2" y="2" width="20" height="20" rx="5" stroke="white" stroke-opacity="0.06" stroke-width="1"/>
+              <path d="M7 12h10M7 8h4M7 16h10" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke-opacity="0.9"/>
+            </svg>
+          </div>
+          <div>
+            <div style="font-weight:700">YourCompany</div>
+            <div style="font-size:13px;color:var(--muted)">Nâng cấp hệ thống</div>
+          </div>
+        </div>
+
+        <div class="progress-wrap" aria-hidden="true">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px;">
+            <div style="font-size:13px;color:var(--muted)">Tiến trình</div>
+            <div style="font-size:13px;font-weight:700" id="prog-percent">40%</div>
+          </div>
+          <div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="40" aria-label="progress">
+            <i id="prog-bar" style="width:40%"></i>
+          </div>
+          <div class="meta"><span>Hoàn tất bản kiểm tra</span><span>Thông báo sẽ được gửi</span></div>
+        </div>
+      </div>
+
+      <div>
+        <label for="email" style="font-size:13px;color:var(--muted);">Nhập email để nhận thông báo khi hoàn tất</label>
+        <form class="email-form" id="notify-form" onsubmit="return false;">
+          <input id="email" type="email" placeholder="you@domain.com" aria-label="Email nhận thông báo" required />
+          <button class="btn" id="notify-btn" type="submit">Nhận</button>
+        </form>
+
+        <div class="socials" aria-hidden="true">
+          <a href="#" title="Twitter" aria-label="Twitter"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 7.999a6.5 6.5 0 0 1-1.885.518A3.301 3.301 0 0 0 19.448 6.2a6.587 6.587 0 0 1-2.087.8A3.28 3.28 0 0 0 9.5 9.8c0 .258.03.51.085.75A9.325 9.325 0 0 1 3.2 6.49a3.28 3.28 0 0 0 1.016 4.378 3.243 3.243 0 0 1-1.486-.41v.04a3.281 3.281 0 0 0 2.632 3.218 3.28 3.28 0 0 1-.86.11c-.21 0-.417-.02-.615-.06a3.284 3.284 0 0 0 3.065 2.28A6.588 6.588 0 0 1 2 17.54a9.29 9.29 0 0 0 5.03 1.47c6.034 0 9.334-4.994 9.334-9.334v-.426A6.683 6.683 0 0 0 20 7.999z" stroke="currentColor" stroke-width="0.6" fill="currentColor"/></svg></a>
+          <a href="#" title="GitHub" aria-label="GitHub"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 .5a12 12 0 0 0-3.79 23.4c.6.11.82-.26.82-.58 0-.29-.01-1.04-.02-2.04-3.34.73-4.04-1.61-4.04-1.61-.55-1.4-1.34-1.77-1.34-1.77-1.1-.75.08-.74.08-.74 1.22.09 1.86 1.25 1.86 1.25 1.08 1.85 2.84 1.32 3.54 1.01.11-.78.42-1.32.76-1.63-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.12-.31-.54-1.56.12-3.25 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.29-1.55 3.29-1.23 3.29-1.23.66 1.69.24 2.94.12 3.25.77.84 1.23 1.91 1.23 3.22 0 4.61-2.8 5.62-5.47 5.92.43.37.81 1.1.81 2.22 0 1.6-.015 2.89-.015 3.28 0 .32.21.7.825.58A12 12 0 0 0 12 .5z" stroke="currentColor" stroke-width="0.4" fill="currentColor"/></svg></a>
+          <a href="#" title="LinkedIn" aria-label="LinkedIn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M4.98 3.5a2.5 2.5 0 1 1 .001 0zM3 8.98h3.98V21H3V8.98zM9.5 8.98H13v1.62h.06c.49-.93 1.7-1.91 3.5-1.91 3.74 0 4.43 2.46 4.43 5.66V21h-3.99v-5.04c0-1.2-.02-2.75-1.67-2.75-1.67 0-1.93 1.31-1.93 2.66V21H9.5V8.98z" fill="currentColor" stroke="currentColor" stroke-width="0.2"/></svg></a>
+        </div>
+      </div>
+    </aside>
+
+    <div class="shine" aria-hidden="true"></div>
+  </main>
+
+  <script>
+    // ========== CONFIGURE HERE ==========
+    // Set completion/launch date (YYYY, M-1, D, H, M, S) local time
+    // Example: new Date(2025, 8, 20, 14, 0, 0) => 20 Sep 2025 14:00 local
+    const targetDate = new Date(2025, 8, 20, 14, 0, 0); // <-- sửa ngày giờ hoàn tất ở đây
+    const contactEmail = "support@example.com"; // <-- sửa email hỗ trợ
+    // initial fake progress percent (0-100). You may update via JS to reflect real progress.
+    let progressPercent = 40;
+    // =====================================
+
+    document.getElementById('contact-email').textContent = contactEmail;
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const progBar = document.getElementById('prog-bar');
+    const progPercent = document.getElementById('prog-percent');
+
+    // animate progress slowly to 65% as demo (you can remove)
+    setTimeout(()=> {
+      progressPercent = Math.min(85, progressPercent + 30);
+      progBar.style.width = progressPercent + '%';
+      progPercent.textContent = progressPercent + '%';
+      document.querySelector('[role="progressbar"]').setAttribute('aria-valuenow', progressPercent);
+    }, 2200);
+
+    // Countdown
+    function updateCountdown(){
+      const now = new Date();
+      let diff = Math.max(0, targetDate - now);
+      const sec = Math.floor(diff/1000)%60;
+      const min = Math.floor(diff/1000/60)%60;
+      const hr  = Math.floor(diff/1000/3600)%24;
+      const day = Math.floor(diff/1000/3600/24);
+
+      document.getElementById('cd-days').textContent = String(day).padStart(2,'0');
+      document.getElementById('cd-hours').textContent = String(hr).padStart(2,'0');
+      document.getElementById('cd-mins').textContent = String(min).padStart(2,'0');
+      document.getElementById('cd-secs').textContent = String(sec).padStart(2,'0');
+
+      if (diff<=0){
+        // when target reached
+        document.getElementById('site-title').textContent = "Hoàn tất — Website đã hoạt động trở lại";
+        document.querySelector('.desc').textContent = "Cảm ơn bạn đã chờ. Trang đã được cập nhật — thử tải lại trang chính.";
+        // set progress to 100%
+        progBar.style.width = '100%';
+        progPercent.textContent = '100%';
+      }
+    }
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+
+    // simple email subscription demo (no backend)
+    document.getElementById('notify-form').addEventListener('submit', function(e){
+      e.preventDefault();
+      const email = document.getElementById('email').value.trim();
+      if (!email) return;
+      // basic email regex
+      const ok = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+      if (!ok){
+        alert('Vui lòng nhập email hợp lệ.');
+        return;
+      }
+      // fake success
+      document.getElementById('notify-btn').textContent = 'Đã gửi ✓';
+      document.getElementById('notify-btn').disabled = true;
+      setTimeout(()=> {
+        document.getElementById('notify-btn').textContent = 'Nhận';
+        document.getElementById('notify-btn').disabled = false;
+        document.getElementById('email').value = '';
+        alert('Cảm ơn! Chúng tôi sẽ thông báo tới email khi hoàn tất.');
+      }, 1200);
+    });
+
+    // accessibility: allow enter on button for keyboard users
+    document.getElementById('notify-btn').addEventListener('click', function(){
+      document.getElementById('notify-form').dispatchEvent(new Event('submit', {cancelable:true, bubbles:true}));
+    });
+  </script>
+</body>
+</html>
