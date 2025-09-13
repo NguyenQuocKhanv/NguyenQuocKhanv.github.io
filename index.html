@@ -1,1 +1,243 @@
+<html lang="en"><div id="in-page-channel-node-id" data-channel-name="in_page_channel_vRtiLL"></div><head><style data-emotion="mantine" data-s=""></style><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="preload" as="image" href="https://r2.guns.lol/dbff9d19-5d8e-4be1-bca2-6ab721f096bf.webp"><link rel="stylesheet" href="/_next/static/css/d9d228332b73bf1e.css" data-precedence="next"><link rel="stylesheet" href="/_next/static/css/e863440b9e24b00d.css" data-precedence="next"><link rel="stylesheet" href="/_next/static/css/f33d9e502b1e7652.css" data-precedence="next"><link rel="stylesheet" href="/_next/static/css/7c953e22cf4176da.css" data-precedence="next"><link rel="preload" as="script" fetchpriority="low" href="/_next/static/chunks/webpack-c90e5298bae9c105.js"><script src="/_next/static/chunks/4bd1b696-5cc00fdd89cac993.js" async=""></script><script src="/_next/static/chunks/1684-ccd0ab83cbafdc8f.js" async=""></script><script src="/_next/static/chunks/main-app-c95b87e4dbcdea77.js" async=""></script><script src="/_next/static/chunks/app/layout-c453b8d241eccdc5.js" async=""></script><script src="/_next/static/chunks/6874-1335ddc9318d7318.js" async=""></script><script src="/_next/static/chunks/app/not-found-c82244e9fe85f8e6.js" async=""></script><script src="/_next/static/chunks/5322-a31cc2ef467c25bd.js" async=""></script><script src="/_next/static/chunks/8306-ea0440b802e2d283.js" async=""></script><script src="/_next/static/chunks/540-dc9b94456c69f193.js" async=""></script><script src="/_next/static/chunks/1100-1ef0397e08238c46.js" async=""></script><script src="/_next/static/chunks/9349-a0a548d327b13e51.js" async=""></script><script src="/_next/static/chunks/6990-20968a621a3be1f5.js" async=""></script><script src="/_next/static/chunks/9677-fb2b81040d185490.js" async=""></script><script src="/_next/static/chunks/4923-5305854283867663.js" async=""></script><script src="/_next/static/chunks/6696-314670b005b014c4.js" async=""></script><script src="/_next/static/chunks/4203-22bef8ba9e6440e4.js" async=""></script><script src="/_next/static/chunks/8011-a3879efb92aff950.js" async=""></script><script src="/_next/static/chunks/3720-3c8ac5ace89120e3.js" async=""></script><script src="/_next/static/chunks/4999-c488f70b131a6ccf.js" async=""></script><script src="/_next/static/chunks/app/%5Busername%5D/page-b97ecd09bc634a83.js" async=""></script><link rel="preload" href="https://sa.guns.lol/latest.js" as="script"><link rel="preload" href="https://assets.guns.lol/cursor-effects.js" as="script"><link rel="preload" href="https://challenges.cloudflare.com/turnstile/v0/api.js" as="script"><link rel="apple-touch-icon" sizes="180x180" href="https://assets.guns.lol/favicon/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="https://assets.guns.lol/favicon/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="https://assets.guns.lol/favicon/favicon-16x16.png"><link rel="manifest" href="https://assets.guns.lol/favicon/site.webmanifest"><meta name="theme-color" content="#ffffff"><link href="https://assets.guns.lol/fonts/X6XYTKIVDUW7GZTZPZNN4EUM5KH54KHF.css" rel="stylesheet"><title>@Xycfe</title><meta name="description" content="Coder - Developer Security"><meta name="author" content="@Xycfer-Script | guns.lol"><meta property="og:title" content="@Xycfer-Script | guns.lol"><meta property="og:description" content="Coder - Developer Security"><meta property="og:image" content="https://og.guns.lol/api/og?username=xycfer&amp;t=1757748129373"><meta property="og:type" content="website"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="@Xycfer-Script | guns.lol"><meta name="twitter:description" content="Coder - Developer Security"><meta name="twitter:image" content="https://og.guns.lol/api/og?username=xycfer&amp;t=1757748129373"><script>document.querySelectorAll('body link[rel="icon"], body link[rel="apple-touch-icon"]').forEach(el => document.head.appendChild(el))</script><script src="/_next/static/chunks/polyfills-42372ed130431b0a.js" nomodule=""></script><script id="_cursor" src="https://assets.guns.lol/cursor-effects.js"></script><script id="_code">
+        const workerScript = `        
+            import init, { GunsSolver } from 'https://assets.guns.lol/pkg/_gunslolpow.js';
+            self.onmessage = async function (event) {               
+                const { ps, d, c, _n, org_ts } = event.data;
+                await init();
+                const _get_s = new GunsSolver(ps, c, parseInt(d), false, _n);
+                const ts = Math.floor(Date.now() / 1000);
+                const _tsoff = ts - Number(org_ts);
+                const tsp = ts - _tsoff;
+                const _res = await _get_s.solve_pow();    
+                if (_res !== null) {
+                    self.postMessage({ _res, ps, tsp, _n, c });
+                }
+            };
+        `;
 
+        const blob = new Blob([workerScript], { type: "application/javascript" });
+        const worker = new Worker(URL.createObjectURL(blob), { type: "module" });
+
+        worker.postMessage({
+            ps: '16c3201a1a83c790685b49bbbfdf719c64c4a2be4855d15624de2c1a4b6',
+            d: '5',
+            c: 'dd8349dc93bfcb6a650887513fb8407f45a9f093d9c50560cd0d6bf6b6112184',
+            _n: 'eGrpLACa2c3Xwbi1',
+            org_ts: '1757748129'
+        });
+
+        worker.onmessage = async function (event) {
+            const { _res, ps, tsp, _n, c } = event.data;
+            if (_res !== undefined) {
+                await getResult(_res);
+            }
+        };
+    </script><style>@keyframes slide-in-one-tap {
+  from {
+    transform: translateY(80px);
+  }
+  to {
+    transform: translateY(0px);
+  }
+}
+
+.trust-hide-gracefully {
+  opacity: 0;
+}
+
+.trust-wallet-one-tap .hidden {
+    display: none;
+  }
+
+.trust-wallet-one-tap .semibold {
+    font-weight: 500;
+  }
+
+.trust-wallet-one-tap .binance-plex {
+    font-family: 'Binance';
+  }
+
+.trust-wallet-one-tap .rounded-full {
+    border-radius: 50%;
+  }
+
+.trust-wallet-one-tap .flex {
+    display: flex;
+  }
+
+.trust-wallet-one-tap .flex-col {
+    flex-direction: column;
+  }
+
+.trust-wallet-one-tap .items-center {
+    align-items: center;
+  }
+
+.trust-wallet-one-tap .space-between {
+    justify-content: space-between;
+  }
+
+.trust-wallet-one-tap .justify-center {
+    justify-content: center;
+  }
+
+.trust-wallet-one-tap .w-full {
+    width: 100%;
+  }
+
+.trust-wallet-one-tap .box {
+    transition: all 0.5s cubic-bezier(0, 0, 0, 1.43);
+    animation: slide-in-one-tap 0.5s cubic-bezier(0, 0, 0, 1.43);
+    width: 384px;
+    border-radius: 15px;
+    background: #fff;
+    box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.25);
+    position: fixed;
+    right: 30px;
+    bottom: 30px;
+    z-index: 1020;
+  }
+
+.trust-wallet-one-tap .header {
+    gap: 15px;
+    border-bottom: 1px solid #e6e6e6;
+    padding: 10px 18px;
+  }
+
+.trust-wallet-one-tap .header .left-items {
+      gap: 15px;
+    }
+
+.trust-wallet-one-tap .header .title {
+      color: #1e2329;
+      font-size: 18px;
+      font-weight: 600;
+      line-height: 28px;
+    }
+
+.trust-wallet-one-tap .header .subtitle {
+      color: #474d57;
+      font-size: 14px;
+      line-height: 20px;
+    }
+
+.trust-wallet-one-tap .header .close {
+      color: #1e2329;
+      cursor: pointer;
+    }
+
+.trust-wallet-one-tap .body {
+    padding: 9px 18px;
+    gap: 10px;
+  }
+
+.trust-wallet-one-tap .body .right-items {
+      gap: 10px;
+      width: 100%;
+    }
+
+.trust-wallet-one-tap .body .right-items .wallet-title {
+        color: #1e2329;
+        font-size: 16px;
+        font-weight: 600;
+        line-height: 20px;
+      }
+
+.trust-wallet-one-tap .body .right-items .wallet-subtitle {
+        color: #474d57;
+        font-size: 14px;
+        line-height: 20px;
+      }
+
+.trust-wallet-one-tap .connect-indicator {
+    gap: 15px;
+    padding: 8px 0;
+  }
+
+.trust-wallet-one-tap .connect-indicator .flow-icon {
+      color: #474d57;
+    }
+
+.trust-wallet-one-tap .loading-color {
+    color: #fff;
+  }
+
+.trust-wallet-one-tap .button {
+    border-radius: 50px;
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+    background-color: rgb(5, 0, 255);
+    border-color: rgb(229, 231, 235);
+    cursor: pointer;
+    text-align: center;
+    height: 45px;
+  }
+
+.trust-wallet-one-tap .button .button-text {
+      color: #fff;
+      font-size: 16px;
+      font-weight: 600;
+      line-height: 20px;
+    }
+
+.trust-wallet-one-tap .footer {
+    margin: 20px 30px;
+  }
+
+.trust-wallet-one-tap .check-icon {
+    color: #fff;
+  }
+
+@font-face {
+  font-family: 'Binance';
+  src: url(chrome-extension://egjidjbpglichdcondbcbdnbeeppgdph/fonts/BinancePlex-Regular.otf) format('opentype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Binance';
+  src: url(chrome-extension://egjidjbpglichdcondbcbdnbeeppgdph/fonts/BinancePlex-Medium.otf) format('opentype');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Binance';
+  src: url(chrome-extension://egjidjbpglichdcondbcbdnbeeppgdph/fonts/BinancePlex-SemiBold.otf) format('opentype');
+  font-weight: 600;
+  font-style: normal;
+}
+
+/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly8uL2FwcC9zcmMvb25lVGFwL3N0eWxlLmNzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTtFQUNFO0lBQ0UsMkJBQTJCO0VBQzdCO0VBQ0E7SUFDRSwwQkFBMEI7RUFDNUI7QUFDRjs7QUFFQTtFQUNFLFVBQVU7QUFDWjs7QUFHRTtJQUNFLGFBQWE7RUFDZjs7QUFFQTtJQUNFLGdCQUFnQjtFQUNsQjs7QUFFQTtJQUNFLHNCQUFzQjtFQUN4Qjs7QUFFQTtJQUNFLGtCQUFrQjtFQUNwQjs7QUFFQTtJQUNFLGFBQWE7RUFDZjs7QUFFQTtJQUNFLHNCQUFzQjtFQUN4Qjs7QUFFQTtJQUNFLG1CQUFtQjtFQUNyQjs7QUFFQTtJQUNFLDhCQUE4QjtFQUNoQzs7QUFFQTtJQUNFLHVCQUF1QjtFQUN6Qjs7QUFFQTtJQUNFLFdBQVc7RUFDYjs7QUFFQTtJQUNFLGdEQUFnRDtJQUNoRCw0REFBNEQ7SUFDNUQsWUFBWTtJQUNaLG1CQUFtQjtJQUNuQixnQkFBZ0I7SUFDaEIsK0NBQStDO0lBQy9DLGVBQWU7SUFDZixXQUFXO0lBQ1gsWUFBWTtJQUNaLGFBQWE7RUFDZjs7QUFFQTtJQUNFLFNBQVM7SUFDVCxnQ0FBZ0M7SUFDaEMsa0JBQWtCO0VBdUJwQjs7QUFyQkU7TUFDRSxTQUFTO0lBQ1g7O0FBRUE7TUFDRSxjQUFjO01BQ2QsZUFBZTtNQUNmLGdCQUFnQjtNQUNoQixpQkFBaUI7SUFDbkI7O0FBRUE7TUFDRSxjQUFjO01BQ2QsZUFBZTtNQUNmLGlCQUFpQjtJQUNuQjs7QUFFQTtNQUNFLGNBQWM7TUFDZCxlQUFlO0lBQ2pCOztBQUdGO0lBQ0UsaUJBQWlCO0lBQ2pCLFNBQVM7RUFtQlg7O0FBakJFO01BQ0UsU0FBUztNQUNULFdBQVc7SUFjYjs7QUFaRTtRQUNFLGNBQWM7UUFDZCxlQUFlO1FBQ2YsZ0JBQWdCO1FBQ2hCLGlCQUFpQjtNQUNuQjs7QUFFQTtRQUNFLGNBQWM7UUFDZCxlQUFlO1FBQ2YsaUJBQWlCO01BQ25COztBQUlKO0lBQ0UsU0FBUztJQUNULGNBQWM7RUFLaEI7O0FBSEU7TUFDRSxjQUFjO0lBQ2hCOztBQUdGO0lBQ0UsV0FBVztFQUNiOztBQUVBO0lBQ0UsbUJBQW1CO0lBQ25CLDhCQUE4QjtJQUM5QixtQkFBbUI7SUFDbkIsZ0NBQWdDO0lBQ2hDLGdDQUFnQztJQUNoQyxlQUFlO0lBQ2Ysa0JBQWtCO0lBQ2xCLFlBQVk7RUFRZDs7QUFORTtNQUNFLFdBQVc7TUFDWCxlQUFlO01BQ2YsZ0JBQWdCO01BQ2hCLGlCQUFpQjtJQUNuQjs7QUFHRjtJQUNFLGlCQUFpQjtFQUNuQjs7QUFFQTtJQUNFLFdBQVc7RUFDYjs7QUFHRjtFQUNFLHNCQUFzQjtFQUN0QiwrREFBMEU7RUFDMUUsZ0JBQWdCO0VBQ2hCLGtCQUFrQjtBQUNwQjs7QUFFQTtFQUNFLHNCQUFzQjtFQUN0QiwrREFBeUU7RUFDekUsZ0JBQWdCO0VBQ2hCLGtCQUFrQjtBQUNwQjs7QUFFQTtFQUNFLHNCQUFzQjtFQUN0QiwrREFBMkU7RUFDM0UsZ0JBQWdCO0VBQ2hCLGtCQUFrQjtBQUNwQiIsInNvdXJjZXNDb250ZW50IjpbIkBrZXlmcmFtZXMgc2xpZGUtaW4tb25lLXRhcCB7XG4gIGZyb20ge1xuICAgIHRyYW5zZm9ybTogdHJhbnNsYXRlWSg4MHB4KTtcbiAgfVxuICB0byB7XG4gICAgdHJhbnNmb3JtOiB0cmFuc2xhdGVZKDBweCk7XG4gIH1cbn1cblxuLnRydXN0LWhpZGUtZ3JhY2VmdWxseSB7XG4gIG9wYWNpdHk6IDA7XG59XG5cbi50cnVzdC13YWxsZXQtb25lLXRhcCB7XG4gIC5oaWRkZW4ge1xuICAgIGRpc3BsYXk6IG5vbmU7XG4gIH1cblxuICAuc2VtaWJvbGQge1xuICAgIGZvbnQtd2VpZ2h0OiA1MDA7XG4gIH1cblxuICAuYmluYW5jZS1wbGV4IHtcbiAgICBmb250LWZhbWlseTogJ0JpbmFuY2UnO1xuICB9XG5cbiAgLnJvdW5kZWQtZnVsbCB7XG4gICAgYm9yZGVyLXJhZGl1czogNTAlO1xuICB9XG5cbiAgLmZsZXgge1xuICAgIGRpc3BsYXk6IGZsZXg7XG4gIH1cblxuICAuZmxleC1jb2wge1xuICAgIGZsZXgtZGlyZWN0aW9uOiBjb2x1bW47XG4gIH1cblxuICAuaXRlbXMtY2VudGVyIHtcbiAgICBhbGlnbi1pdGVtczogY2VudGVyO1xuICB9XG5cbiAgLnNwYWNlLWJldHdlZW4ge1xuICAgIGp1c3RpZnktY29udGVudDogc3BhY2UtYmV0d2VlbjtcbiAgfVxuXG4gIC5qdXN0aWZ5LWNlbnRlciB7XG4gICAganVzdGlmeS1jb250ZW50OiBjZW50ZXI7XG4gIH1cblxuICAudy1mdWxsIHtcbiAgICB3aWR0aDogMTAwJTtcbiAgfVxuXG4gIC5ib3gge1xuICAgIHRyYW5zaXRpb246IGFsbCAwLjVzIGN1YmljLWJlemllcigwLCAwLCAwLCAxLjQzKTtcbiAgICBhbmltYXRpb246IHNsaWRlLWluLW9uZS10YXAgMC41cyBjdWJpYy1iZXppZXIoMCwgMCwgMCwgMS40Myk7XG4gICAgd2lkdGg6IDM4NHB4O1xuICAgIGJvcmRlci1yYWRpdXM6IDE1cHg7XG4gICAgYmFja2dyb3VuZDogI2ZmZjtcbiAgICBib3gtc2hhZG93OiAwcHggMnB4IDRweCAwcHggcmdiYSgwLCAwLCAwLCAwLjI1KTtcbiAgICBwb3NpdGlvbjogZml4ZWQ7XG4gICAgcmlnaHQ6IDMwcHg7XG4gICAgYm90dG9tOiAzMHB4O1xuICAgIHotaW5kZXg6IDEwMjA7XG4gIH1cblxuICAuaGVhZGVyIHtcbiAgICBnYXA6IDE1cHg7XG4gICAgYm9yZGVyLWJvdHRvbTogMXB4IHNvbGlkICNlNmU2ZTY7XG4gICAgcGFkZGluZzogMTBweCAxOHB4O1xuXG4gICAgLmxlZnQtaXRlbXMge1xuICAgICAgZ2FwOiAxNXB4O1xuICAgIH1cblxuICAgIC50aXRsZSB7XG4gICAgICBjb2xvcjogIzFlMjMyOTtcbiAgICAgIGZvbnQtc2l6ZTogMThweDtcbiAgICAgIGZvbnQtd2VpZ2h0OiA2MDA7XG4gICAgICBsaW5lLWhlaWdodDogMjhweDtcbiAgICB9XG5cbiAgICAuc3VidGl0bGUge1xuICAgICAgY29sb3I6ICM0NzRkNTc7XG4gICAgICBmb250LXNpemU6IDE0cHg7XG4gICAgICBsaW5lLWhlaWdodDogMjBweDtcbiAgICB9XG5cbiAgICAuY2xvc2Uge1xuICAgICAgY29sb3I6ICMxZTIzMjk7XG4gICAgICBjdXJzb3I6IHBvaW50ZXI7XG4gICAgfVxuICB9XG5cbiAgLmJvZHkge1xuICAgIHBhZGRpbmc6IDlweCAxOHB4O1xuICAgIGdhcDogMTBweDtcblxuICAgIC5yaWdodC1pdGVtcyB7XG4gICAgICBnYXA6IDEwcHg7XG4gICAgICB3aWR0aDogMTAwJTtcblxuICAgICAgLndhbGxldC10aXRsZSB7XG4gICAgICAgIGNvbG9yOiAjMWUyMzI5O1xuICAgICAgICBmb250LXNpemU6IDE2cHg7XG4gICAgICAgIGZvbnQtd2VpZ2h0OiA2MDA7XG4gICAgICAgIGxpbmUtaGVpZ2h0OiAyMHB4O1xuICAgICAgfVxuXG4gICAgICAud2FsbGV0LXN1YnRpdGxlIHtcbiAgICAgICAgY29sb3I6ICM0NzRkNTc7XG4gICAgICAgIGZvbnQtc2l6ZTogMTRweDtcbiAgICAgICAgbGluZS1oZWlnaHQ6IDIwcHg7XG4gICAgICB9XG4gICAgfVxuICB9XG5cbiAgLmNvbm5lY3QtaW5kaWNhdG9yIHtcbiAgICBnYXA6IDE1cHg7XG4gICAgcGFkZGluZzogOHB4IDA7XG5cbiAgICAuZmxvdy1pY29uIHtcbiAgICAgIGNvbG9yOiAjNDc0ZDU3O1xuICAgIH1cbiAgfVxuXG4gIC5sb2FkaW5nLWNvbG9yIHtcbiAgICBjb2xvcjogI2ZmZjtcbiAgfVxuXG4gIC5idXR0b24ge1xuICAgIGJvcmRlci1yYWRpdXM6IDUwcHg7XG4gICAgb3V0bGluZTogMnB4IHNvbGlkIHRyYW5zcGFyZW50O1xuICAgIG91dGxpbmUtb2Zmc2V0OiAycHg7XG4gICAgYmFja2dyb3VuZC1jb2xvcjogcmdiKDUsIDAsIDI1NSk7XG4gICAgYm9yZGVyLWNvbG9yOiByZ2IoMjI5LCAyMzEsIDIzNSk7XG4gICAgY3Vyc29yOiBwb2ludGVyO1xuICAgIHRleHQtYWxpZ246IGNlbnRlcjtcbiAgICBoZWlnaHQ6IDQ1cHg7XG5cbiAgICAuYnV0dG9uLXRleHQge1xuICAgICAgY29sb3I6ICNmZmY7XG4gICAgICBmb250LXNpemU6IDE2cHg7XG4gICAgICBmb250LXdlaWdodDogNjAwO1xuICAgICAgbGluZS1oZWlnaHQ6IDIwcHg7XG4gICAgfVxuICB9XG5cbiAgLmZvb3RlciB7XG4gICAgbWFyZ2luOiAyMHB4IDMwcHg7XG4gIH1cblxuICAuY2hlY2staWNvbiB7XG4gICAgY29sb3I6ICNmZmY7XG4gIH1cbn1cblxuQGZvbnQtZmFjZSB7XG4gIGZvbnQtZmFtaWx5OiAnQmluYW5jZSc7XG4gIHNyYzogdXJsKCcuL2ZvbnRzL2JpbmFuY2VQbGV4L0JpbmFuY2VQbGV4LVJlZ3VsYXIub3RmJykgZm9ybWF0KCdvcGVudHlwZScpO1xuICBmb250LXdlaWdodDogNDAwO1xuICBmb250LXN0eWxlOiBub3JtYWw7XG59XG5cbkBmb250LWZhY2Uge1xuICBmb250LWZhbWlseTogJ0JpbmFuY2UnO1xuICBzcmM6IHVybCgnLi9mb250cy9iaW5hbmNlUGxleC9CaW5hbmNlUGxleC1NZWRpdW0ub3RmJykgZm9ybWF0KCdvcGVudHlwZScpO1xuICBmb250LXdlaWdodDogNTAwO1xuICBmb250LXN0eWxlOiBub3JtYWw7XG59XG5cbkBmb250LWZhY2Uge1xuICBmb250LWZhbWlseTogJ0JpbmFuY2UnO1xuICBzcmM6IHVybCgnLi9mb250cy9iaW5hbmNlUGxleC9CaW5hbmNlUGxleC1TZW1pQm9sZC5vdGYnKSBmb3JtYXQoJ29wZW50eXBlJyk7XG4gIGZvbnQtd2VpZ2h0OiA2MDA7XG4gIGZvbnQtc3R5bGU6IG5vcm1hbDtcbn1cbiJdLCJzb3VyY2VSb290IjoiIn0= */</style><link rel="stylesheet" data-font="satoshi" href=""><style data-font="satoshi">
+                body, * {
+                    font-family: 'Satoshi', sans-serif !important;
+                }
+            </style></head><body><video src="https://r2.guns.lol/51025df6-eca7-4ab3-b01a-ed782a984261.mp4" playsinline="" loop="" class="glyWnb_ca56e6cc6120e82558ef"></video><div class="t33BNn_4ac5c10f247eb261df8a xYyzGc_90eaf9aaa3c00ed121cd" style="pointer-events: none; display: none;"><div class="lXNQ0G_dbdc0f63fcf9ce25e8c2" style="font-weight:700;font-size:30px">click to enter...</div></div><div class="fttY9O_2a5dc86ff6a43e387d0c"></div><script>(self.__next_s=self.__next_s||[]).push(["https://assets.guns.lol/cursor-effects.js",{"id":"_cursor"}])</script><style>
+                    * {
+                      cursor: url(https://r2.guns.lol/2b0d3c7e-3ffa-4fb1-8a38-66b1a37bffa8.webp) 16 16, auto !important;
+                    }
+                    </style><style>
+                ::-moz-selection {
+                    background: #ffffff;
+                    color: #0e569e;
+                }
+                ::selection {
+                    background: #ffffff;
+                    color: #0e569e;
+                }
+                </style><div class="g09gBy_e606f195670897bc74a6" style="background-color:#0e569e"></div><div style="--presenceUsernameColor:#ffffff;--presenceStatusColor:rgba(255, 255, 255, 0.7);--presenceContainerBackground:rgba(0, 0, 0, 0.2);--presenceContainerBorder:2px solid rgba(0, 0, 0, 0.1);--discordServerMembers:rgba(255, 255, 255, 0.6);--secondTabBackground:rgba(0, 0, 0, 0.2);--secondTabBorder:2px solid rgba(0, 0, 0, 0.1);--discordMissingIcon:rgba(255, 255, 255, 0.25);--modernLayoutSeperator:rgba(255, 255, 255, 0.12);--modernLayoutSeperatorBorder:rgba(255, 255, 255, 0.12);--discordAvatarBorder:2px solid rgba(0, 0, 0, 0.15);--badgeContainerBackground:rgba(0, 0, 0, 0.2);--badgeContainerBorder:2px solid rgba(0, 0, 0, 0.04);--userBadge:20.5px;--textColor:#ffffff;--textColorDarker:rgba(255, 255, 255, 0.5);--iconColor:#ffffff;--backgroundColor:#0e569e;--joinStatus:rgba(255, 255, 255, 0.65);--audioPlayerBar:rgba(255, 255, 255, 0.35);--avatarBorder:2px solid rgba(0, 0, 0, 0.4);--containerColor:rgba(0, 0, 0, 0.5);--containerBlur:10px;--containerRadius:20px;--containerWidth:40rem;--containerPadding:35px 15px;--volumeBackgroundcolor:rgba(0, 0, 0, 0.5);--volumeBorder:2px solid rgba(0, 0, 0, 0.45);--colorUsernameGlow:0px 0px 16.5px #ffffff;--buttonBackground:rgba(255, 255, 255, 0.22);--buttonBorder:2px solid rgba(255, 255, 255, 0.12);--buttonRadius:12px;--buttonAlign:center;--buttonBackgroundHover:rgba(255, 255, 255, 0.32);--buttonBorderHover:2px solid rgba(255, 255, 255, 0.25);--buttonUrlColor:rgba(255, 255, 255, 0.65);--profileViewsContainerBorder:2px solid rgba(255, 255, 255, 0.4);--templatePreviewContainerBackground:rgba(0, 0, 0, 0.4);--platformTextColor:rgba(255, 255, 255, 0.4);--secondTabWidgetDescription:rgba(255, 255, 255, 0.6);--audioIconBackground:rgba(255, 255, 255, 0.2);--progessBarFull:rgba(255, 255, 255, 0.3);--progessBarPlaying:#ffffff;--controlButtonsOther:rgba(255, 255, 255, 0.5);--controlButtonPlaying:#ffffff;--controlTextColor:rgba(255, 255, 255, 0.7);--modernLayoutBottomLeftDivider:rgba(255, 255, 255, 0.14);--sleekLayoutTopRightDivider:rgba(255, 255, 255, 0.14)"><div class="igyZRU_8629220724424aabca4a"><span><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 48 48"><defs><mask id="ipTVolumeNotice0"><g fill="none" stroke="#fff" stroke-width="4"><path fill="#555" stroke-linejoin="round" d="M24 6v36c-7 0-12.201-9.16-12.201-9.16H6a2 2 0 0 1-2-2V17.01a2 2 0 0 1 2-2h5.799S17 6 24 6Z"></path><path stroke-linecap="round" stroke-linejoin="round" d="M32 15a11.91 11.91 0 0 1 1.684 1.859A12.07 12.07 0 0 1 36 24c0 2.654-.846 5.107-2.278 7.09A11.936 11.936 0 0 1 32 33"></path><path stroke-linecap="round" d="M34.236 41.186C40.084 37.696 44 31.305 44 24c0-7.192-3.796-13.496-9.493-17.02"></path></g></mask></defs><path fill="currentColor" d="M0 0h48v48H0z" mask="url(#ipTVolumeNotice0)"></path></svg></span><div class="ycO1wn_c071c3527619a0c9a76b"><style>
+                                        .mantine-Slider-label {
+                                        display: none
+                                        }
+                                        .mantine-Slider-track::before {
+                                                background: var(--textColorDarker);
+                                            }
+                                        .mantine-Slider-bar {
+                                            background-color: var(--textColor)
+                                        }
+                                        .mantine-Slider-thumb {
+                                            border: 0.15rem solid var(--containerColor);
+                                            box-shadow: var(--textColorDarker) 0px 5px 25px 0px;
+                                        </style><div class="uGln9b_65441dc180f8713642f9"><h1 class="hTeZXl_31b537cf41e15a13c496"></h1><div class="mWYwp3_ad32a816426011a46807"><div class="mantine-Slider-root mantine-16d7kiv" tabindex="-1"><div class="mantine-12p37cx mantine-Slider-trackContainer"><div class="mantine-mu412o mantine-Slider-track"><div class="mantine-Slider-bar mantine-1pac8x3"></div><div class="mantine-Slider-thumb mantine-4bxu6y" style="left:100%" tabindex="0" role="slider" aria-label="" aria-valuemax="100" aria-valuemin="0" aria-valuenow="100"></div></div></div><div class="mantine-s2z3jd mantine-Slider-marksContainer"></div><input type="hidden" value="100"></div></div></div></div></div><div class="m3nOWb_8d25fbd2ec018e7f3333"><div class="rGOXYc_089e78ae7261139e29df"><div class="sumWSY_35f2a4c5b48e5f22cb72" style="position:fixed"><div class="nNbJX2_02af604a2f0bd5f52a08 rWYXuN_85176f7ad5dd05cd2a8a b3Z0cx_13307e85a9f2f85643fd"><div class="v1xy1T_d0dc3a8bbeb8294cbc40"><div class="vyY0Wh_85a5034ad3ee4f215066"><img src="https://r2.guns.lol/dbff9d19-5d8e-4be1-bca2-6ab721f096bf.webp" alt="" class="xwN2zc_229bedc9b07046bf61d1 false"></div><div class="aYGbcZ_b7ae81993acc636a36eb false"><h1 class="zZjVXY_f8ef53b912061d92eab6 false" style="font-weight:600;font-size:39.5px">Xycfer-Script</h1><h3 class="zUGNbn_1fe480aaf30e20184c29" style="font-weight:570;font-size:19px">Coder - Developer Security</h3></div></div><script>(self.__next_s=self.__next_s||[]).push([0,{"children":"\n        const workerScript = `        \n            import init, { GunsSolver } from 'https://assets.guns.lol/pkg/_gunslolpow.js';\n            self.onmessage = async function (event) {               \n                const { ps, d, c, _n, org_ts } = event.data;\n                await init();\n                const _get_s = new GunsSolver(ps, c, parseInt(d), false, _n);\n                const ts = Math.floor(Date.now() / 1000);\n                const _tsoff = ts - Number(org_ts);\n                const tsp = ts - _tsoff;\n                const _res = await _get_s.solve_pow();    \n                if (_res !== null) {\n                    self.postMessage({ _res, ps, tsp, _n, c });\n                }\n            };\n        `;\n\n        const blob = new Blob([workerScript], { type: \"application/javascript\" });\n        const worker = new Worker(URL.createObjectURL(blob), { type: \"module\" });\n\n        worker.postMessage({\n            ps: '16c3201a1a83c790685b49bbbfdf719c64c4a2be4855d15624de2c1a4b6',\n            d: '5',\n            c: 'dd8349dc93bfcb6a650887513fb8407f45a9f093d9c50560cd0d6bf6b6112184',\n            _n: 'eGrpLACa2c3Xwbi1',\n            org_ts: '1757748129'\n        });\n\n        worker.onmessage = async function (event) {\n            const { _res, ps, tsp, _n, c } = event.data;\n            if (_res !== undefined) {\n                await getResult(_res);\n            }\n        };\n    ","id":"_code"}])</script><div class="cf-turnstile" style="display:none" data-sitekey="0x4AAAAAAAgU7T2niLQD-TLm" data-callback="getToken"><div><input type="hidden" name="cf-turnstile-response" id="cf-chl-widget-y60kl_response" value="0.R2SXTRiSqXVM9atySvN3fyzTygWX6Ibfzwkcev8vIo4FSuY_5lX_3ZRFeiIevnkc0x_CYVtVd7lEywBvaLzDXly1zfCixTddcGqcjvya9Te5JwTTDT44WqECVB-8tEnhiDLjfhInNs-mdyDBCNuwnXgvBDQGPCm7dqD4a9FPo2frs6MLzoMHZ2fHwKnbxnFWZpF2tnXR-UsY6TNkTKqZntMYJYcXkJNeUrf1pNRTxZ_6HMvIsoI4GYjz6-2CPIsiEbuCfBzLS7pA3NPQ6DScF0LoWaqC9E6nYXGk3lV7PrQKr_WcQM7bYEzbgqfB-rwdKQ1C0FiMZjnzqL6ogailo7BekTam2yMdsICfHFlmQ9i6tflWyZvdj6wswtejrRxjvXVPeJmCmfqG6dRP9PO5rvq75EcqcpyJWXxm08ahRBeTDGCN6PfuaadPSPb3k411tV7YtCS3uE6An1m5-HTi4rmJo2TDr61a-MdAgtkAlRdQkhvXbZCPmvCScXj-lW5I3TjkoqF_MpVFyqXx2METBoYW4gTlh6HyYSFF89XbgxVa-10Q5DB1K43Dj5g_QcYIelDr0NO0A_TUEmziNcrNyqj0PJh4Lp3ND5qOf4DL5NCLQlxBjuX98IJJXa9eB5qtHUwZnKEviyn8nSshUVugDh-7HUkdTuN3fgthey1JGWlxN6ovtl4E9DzkNFORl0EPXdRzTL2q4KKTd4DNKhN0nLKFxXp1ZyZWZkZuG5yVoYYZgn1BKt5IyvVP5SRuGo2mPP2mLW54sgfarfdvG-4kyvi4-a2OX1nbYyL4lHA3MQmPdmVUQHfvANxF-OXO5ZSSYCy1FnKN_FKGVX7WaYJUq2HVit6L8XGTrlRmGk1lDUEYfV4Ct_OP1nyFK_OYWBqYdeIP0ySd84WvXU-0sNw-LI2-QQINL96Wsq5vcOtRkvc.PZUJz8AtXg0PPWDerRHiKQ.dd9a696719ec7136a4d75ccb994ddffc71d71955e16eb4005c349a050deddf7d"></div></div><div class="jVyntN_599d5ef2ae281840bef2 false" style="bottom:12px;left:15px"><span style="font-weight:550;font-size:14px"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="currentColor" d="M12 9a3 3 0 0 0-3 3a3 3 0 0 0 3 3a3 3 0 0 0 3-3a3 3 0 0 0-3-3m0 8a5 5 0 0 1-5-5a5 5 0 0 1 5-5a5 5 0 0 1 5 5a5 5 0 0 1-5 5m0-12.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5"></path></svg> <!-- -->0</span></div></div></div></div></div></div><!--$--><!--/$--><!--$--><!--/$--><script src="/_next/static/chunks/webpack-c90e5298bae9c105.js" async=""></script><script>(self.__next_f=self.__next_f||[]).push([0])</script><script>self.__next_f.push([1,"1:\"$Sreact.fragment\"\n2:I[69243,[\"7177\",\"static/chunks/app/layout-c453b8d241eccdc5.js\"],\"\"]\n3:I[56496,[\"7177\",\"static/chunks/app/layout-c453b8d241eccdc5.js\"],\"default\"]\n4:I[87555,[],\"\"]\n5:I[31295,[],\"\"]\n6:I[6874,[\"6874\",\"static/chunks/6874-1335ddc9318d7318.js\",\"4345\",\"static/chunks/app/not-found-c82244e9fe85f8e6.js\"],\"\"]\n8:I[59665,[],\"MetadataBoundary\"]\na:I[59665,[],\"OutletBoundary\"]\nd:I[74911,[],\"AsyncMetadataOutlet\"]\nf:I[59665,[],\"ViewportBoundary\"]\n11:I[26614,[],\"\"]\n12:\"$Sreact.suspense\"\n13:I[74911,[],\"AsyncMetadata\"]\n:HL[\"/_next/static/css/d9d228332b73bf1e.css\",\"style\"]\n:HL[\"/_next/static/css/e863440b9e24b00d.css\",\"style\"]\n:HL[\"/_next/static/css/f33d9e502b1e7652.css\",\"style\"]\n:HL[\"/_next/static/css/7c953e22cf4176da.css\",\"style\"]\n"])</script><script>self.__next_f.push([1,"0:{\"P\":null,\"b\":\"5CVSkB92n_Afee6eFQA_5\",\"p\":\"\",\"c\":[\"\",\"xycfer\"],\"i\":false,\"f\":[[[\"\",{\"children\":[[\"username\",\"xycfer\",\"d\"],{\"children\":[\"__PAGE__\",{}]}]},\"$undefined\",\"$undefined\",true],[\"\",[\"$\",\"$1\",\"c\",{\"children\":[[[\"$\",\"link\",\"0\",{\"rel\":\"stylesheet\",\"href\":\"/_next/static/css/d9d228332b73bf1e.css\",\"precedence\":\"next\",\"crossOrigin\":\"$undefined\",\"nonce\":\"$undefined\"}]],[\"$\",\"html\",null,{\"lang\":\"en\",\"children\":[[\"$\",\"head\",null,{\"children\":[[\"$\",\"link\",null,{\"href\":\"https://assets.guns.lol/fonts/X6XYTKIVDUW7GZTZPZNN4EUM5KH54KHF.css\",\"rel\":\"stylesheet\"}],[\"$\",\"$L2\",null,{\"src\":\"https://sa.guns.lol/latest.js\",\"id\":\"_sa\"}],[\"$\",\"link\",null,{\"rel\":\"apple-touch-icon\",\"sizes\":\"180x180\",\"href\":\"https://assets.guns.lol/favicon/apple-touch-icon.png\"}],[\"$\",\"link\",null,{\"rel\":\"icon\",\"type\":\"image/png\",\"sizes\":\"32x32\",\"href\":\"https://assets.guns.lol/favicon/favicon-32x32.png\"}],[\"$\",\"link\",null,{\"rel\":\"icon\",\"type\":\"image/png\",\"sizes\":\"16x16\",\"href\":\"https://assets.guns.lol/favicon/favicon-16x16.png\"}],[\"$\",\"link\",null,{\"rel\":\"manifest\",\"href\":\"https://assets.guns.lol/favicon/site.webmanifest\"}]]}],[\"$\",\"body\",null,{\"children\":[[\"$\",\"$L3\",null,{}],[\"$\",\"$L4\",null,{\"parallelRouterKey\":\"children\",\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L5\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":[[\"$\",\"div\",null,{\"className\":\"eFXwWB_acae7ef2ade572800706\",\"children\":[\"$\",\"div\",null,{\"className\":\"xXlW3w_2a483bfff065871e1e78\",\"children\":[[\"$\",\"svg\",null,{\"xmlns\":\"http://www.w3.org/2000/svg\",\"width\":\"1em\",\"height\":\"1em\",\"viewBox\":\"0 0 24 24\",\"children\":[\"$\",\"path\",null,{\"fill\":\"currentColor\",\"d\":\"M13 2v14.5h-2V2zm-2 17h2.004v2.004H11z\"}]}],[\"$\",\"h1\",null,{\"children\":\"We couldn't find this page.\"}],[\"$\",\"h3\",null,{\"children\":\"The page you are looking for doesn't exist.\"}],[\"$\",\"div\",null,{\"className\":\"zCFsUW_1091dd5bbcca39b5f847\",\"children\":[\"$\",\"$L6\",null,{\"href\":\"/\",\"children\":\"Go Home\"}]}]]}]}],[[\"$\",\"link\",\"0\",{\"rel\":\"stylesheet\",\"href\":\"/_next/static/css/f33d9e502b1e7652.css\",\"precedence\":\"next\",\"crossOrigin\":\"$undefined\",\"nonce\":\"$undefined\"}]]],\"forbidden\":\"$undefined\",\"unauthorized\":\"$undefined\"}]]}]]}]]}],{\"children\":[[\"username\",\"xycfer\",\"d\"],[\"$\",\"$1\",\"c\",{\"children\":[null,[\"$\",\"$L4\",null,{\"parallelRouterKey\":\"children\",\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L5\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":\"$undefined\",\"forbidden\":\"$undefined\",\"unauthorized\":\"$undefined\"}]]}],{\"children\":[\"__PAGE__\",[\"$\",\"$1\",\"c\",{\"children\":[\"$L7\",[\"$\",\"$L8\",null,{\"children\":\"$L9\"}],[[\"$\",\"link\",\"0\",{\"rel\":\"stylesheet\",\"href\":\"/_next/static/css/e863440b9e24b00d.css\",\"precedence\":\"next\",\"crossOrigin\":\"$undefined\",\"nonce\":\"$undefined\"}],[\"$\",\"link\",\"1\",{\"rel\":\"stylesheet\",\"href\":\"/_next/static/css/f33d9e502b1e7652.css\",\"precedence\":\"next\",\"crossOrigin\":\"$undefined\",\"nonce\":\"$undefined\"}],[\"$\",\"link\",\"2\",{\"rel\":\"stylesheet\",\"href\":\"/_next/static/css/7c953e22cf4176da.css\",\"precedence\":\"next\",\"crossOrigin\":\"$undefined\",\"nonce\":\"$undefined\"}]],[\"$\",\"$La\",null,{\"children\":[\"$Lb\",\"$Lc\",[\"$\",\"$Ld\",null,{\"promise\":\"$@e\"}]]}]]}],{},null,false]},null,false]},null,false],[\"$\",\"$1\",\"h\",{\"children\":[null,[\"$\",\"$1\",\"KR72NQK9FONQ2TRNrnsie\",{\"children\":[[\"$\",\"$Lf\",null,{\"children\":\"$L10\"}],null]}],null]}],false]],\"m\":\"$undefined\",\"G\":[\"$11\",\"$undefined\"],\"s\":false,\"S\":false}\n"])</script><script>self.__next_f.push([1,"9:[\"$\",\"$12\",null,{\"fallback\":null,\"children\":[\"$\",\"$L13\",null,{\"promise\":\"$@14\"}]}]\nc:null\n"])</script><script>self.__next_f.push([1,"15:I[74999,[\"6874\",\"static/chunks/6874-1335ddc9318d7318.js\",\"5322\",\"static/chunks/5322-a31cc2ef467c25bd.js\",\"8306\",\"static/chunks/8306-ea0440b802e2d283.js\",\"540\",\"static/chunks/540-dc9b94456c69f193.js\",\"1100\",\"static/chunks/1100-1ef0397e08238c46.js\",\"9349\",\"static/chunks/9349-a0a548d327b13e51.js\",\"6990\",\"static/chunks/6990-20968a621a3be1f5.js\",\"9677\",\"static/chunks/9677-fb2b81040d185490.js\",\"4923\",\"static/chunks/4923-5305854283867663.js\",\"6696\",\"static/chunks/6696-314670b005b014c4.js\",\"4203\",\"static/chunks/4203-22bef8ba9e6440e4.js\",\"8011\",\"static/chunks/8011-a3879efb92aff950.js\",\"3720\",\"static/chunks/3720-3c8ac5ace89120e3.js\",\"4999\",\"static/chunks/4999-c488f70b131a6ccf.js\",\"1911\",\"static/chunks/app/%5Busername%5D/page-b97ecd09bc634a83.js\"],\"default\"]\n7:[\"$\",\"$L15\",null,{\"data\":{\"_id\":\"68c5160eb39c5005850f6714\",\"username\":\"xycfer\",\"account_created\":1757746702,\"verified\":true,\"alias\":\"\",\"config\":{\"description\":\"Coder - Developer Security\",\"color\":\"#000000\",\"text_color\":\"#ffffff\",\"bg_color\":\"#0e569e\",\"icon_color\":\"#ffffff\",\"gradient_1\":\"#881c9c\",\"gradient_2\":\"#0d0d0d\",\"profile_gradient\":false,\"presence\":\"\",\"audio\":[],\"avatar\":\"https://r2.guns.lol/dbff9d19-5d8e-4be1-bca2-6ab721f096bf.webp\",\"custom_cursor\":\"https://r2.guns.lol/2b0d3c7e-3ffa-4fb1-8a38-66b1a37bffa8.webp\",\"url\":\"https://r2.guns.lol/51025df6-eca7-4ab3-b01a-ed782a984261.mp4\",\"animated_title\":true,\"monochrome\":true,\"volume_control\":true,\"use_discord_avatar\":true,\"swap_colors\":true,\"social_glow\":true,\"badge_glow\":false,\"display_name\":\"Xycfer-Script\",\"background_effects\":\"night\",\"username_effects\":\"none\",\"shuffle_audios\":false,\"audio_player\":false,\"location\":\"\",\"username_glow\":true,\"discord_avatar_decoration\":true,\"blur\":10,\"opacity\":0.5,\"page_views\":0,\"user_badges\":[],\"custom_badges\":[],\"socials\":[],\"premium\":{\"effects_color\":\"#ffffff\",\"badge_color\":\"#ffffff\",\"border_color\":\"#ffffff\",\"typewriter_enabled\":false,\"typewriter_speed\":5,\"typewriter_delete_speed\":7,\"typewriter\":[],\"hide_views\":false,\"border_enabled\":false,\"second_tab_enabled\":false,\"monochrome_badg"])</script><script>self.__next_f.push([1,"es\":false,\"animation\":\"fade\",\"parallax_animation\":false,\"hide_join_date\":false,\"border_width\":2,\"border_radius\":20,\"avatar_radius\":35,\"second_tab\":{},\"cursor_effects\":\"\",\"font\":\"satoshi\",\"page_enter_text\":\"\",\"layout\":\"default\",\"banner\":\"\",\"buttons\":[],\"show_url\":false,\"text_align\":\"center\",\"button_shadow\":false,\"button_border_radius\":12,\"metadata\":{\"title\":\"\",\"description\":\"\",\"image\":\"\",\"favicon\":\"\",\"information_overlay\":false}}},\"premium\":false,\"uid\":991053,\"_C\":\"dd8349dc93bfcb6a650887513fb8407f45a9f093d9c50560cd0d6bf6b6112184\",\"_PS\":\"16c3201a1a83c790685b49bbbfdf719c64c4a2be4855d15624de2c1a4b6\",\"_ts\":1757748129,\"_n\":\"eGrpLACa2c3Xwbi1\",\"success\":true}}]\n10:[[\"$\",\"meta\",\"0\",{\"charSet\":\"utf-8\"}],[\"$\",\"meta\",\"1\",{\"name\":\"viewport\",\"content\":\"width=device-width, initial-scale=1\"}],[\"$\",\"meta\",\"2\",{\"name\":\"theme-color\",\"content\":\"#ffffff\"}]]\nb:null\n14:{\"metadata\":[[\"$\",\"title\",\"0\",{\"children\":\"@Xycfer-Script | guns.lol\"}],[\"$\",\"meta\",\"1\",{\"name\":\"description\",\"content\":\"Coder - Developer Security\"}],[\"$\",\"meta\",\"2\",{\"name\":\"author\",\"content\":\"@Xycfer-Script | guns.lol\"}],[\"$\",\"meta\",\"3\",{\"property\":\"og:title\",\"content\":\"@Xycfer-Script | guns.lol\"}],[\"$\",\"meta\",\"4\",{\"property\":\"og:description\",\"content\":\"Coder - Developer Security\"}],[\"$\",\"meta\",\"5\",{\"property\":\"og:image\",\"content\":\"https://og.guns.lol/api/og?username=xycfer\u0026t=1757748129373\"}],[\"$\",\"meta\",\"6\",{\"property\":\"og:type\",\"content\":\"website\"}],[\"$\",\"meta\",\"7\",{\"name\":\"twitter:card\",\"content\":\"summary_large_image\"}],[\"$\",\"meta\",\"8\",{\"name\":\"twitter:title\",\"content\":\"@Xycfer-Script | guns.lol\"}],[\"$\",\"meta\",\"9\",{\"name\":\"twitter:description\",\"content\":\"Coder - Developer Security\"}],[\"$\",\"meta\",\"10\",{\"name\":\"twitter:image\",\"content\":\"https://og.guns.lol/api/og?username=xycfer\u0026t=1757748129373\"}]],\"error\":null,\"digest\":\"$undefined\"}\ne:{\"metadata\":\"$14:metadata\",\"error\":null,\"digest\":\"$undefined\"}\n"])</script><script defer="" src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon="{&quot;version&quot;:&quot;2024.11.0&quot;,&quot;token&quot;:&quot;2fe24d772b4146c9a06db032d45156c9&quot;,&quot;server_timing&quot;:{&quot;name&quot;:{&quot;cfCacheStatus&quot;:true,&quot;cfEdge&quot;:true,&quot;cfExtPri&quot;:true,&quot;cfL4&quot;:true,&quot;cfOrigin&quot;:true,&quot;cfSpeedBrain&quot;:true},&quot;location_startswith&quot;:null}}" crossorigin="anonymous"></script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97e5e44cdc692100',t:'MTc1Nzc0ODEyOA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><iframe height="1" width="1" style="position: absolute; top: 0px; left: 0px; border: none; visibility: hidden;"></iframe><script src="https://sa.guns.lol/latest.js" id="_sa" data-nscript="afterInteractive"></script><script src="https://challenges.cloudflare.com/turnstile/v0/api.js" id="_turnstile" data-nscript="afterInteractive"></script><next-route-announcer style="position: absolute;"></next-route-announcer></body><chatgpt-sidebar data-gpts-theme="light"></chatgpt-sidebar></html>
