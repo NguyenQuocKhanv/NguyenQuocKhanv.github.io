@@ -39,11 +39,19 @@
       width: 180px;
       height: 180px;
       margin: 0 auto 20px auto;
+      display: block;
     }
 
     h1 {
       font-size: 2.2rem;
-      margin-bottom: 15px;
+      margin-bottom: 10px;
+    }
+
+    .timer {
+      font-size: 1.2rem;
+      font-weight: bold;
+      margin-bottom: 20px;
+      color: #00c6ff;
     }
 
     p {
@@ -77,21 +85,85 @@
       font-size: 0.9rem;
       color: #aaa;
     }
+
+    /* FPS counter */
+    #fpsCounter {
+      position: fixed;
+      top: 10px;
+      left: 15px;
+      background: rgba(0, 0, 0, 0.5);
+      padding: 5px 10px;
+      border-radius: 6px;
+      font-size: 14px;
+      color: #00ff99;
+      font-weight: bold;
+      z-index: 1000;
+    }
   </style>
 </head>
 <body>
+  <div id="fpsCounter">FPS: 0</div>
+
   <div class="container">
-    <!-- Logo GIF ở giữa -->
+    <!-- Logo lấy từ link -->
     <img src="logo.gif" alt="Logo" class="logo">
 
     <h1>🚧 Website đang bảo trì 🚧</h1>
+    <!-- Thời gian bảo trì -->
+    <div class="timer" id="maintenanceTimer">Hoàn tất sau: --:--:--</div>
+
     <p>Chúng tôi đang nâng cấp để mang đến trải nghiệm tốt hơn.<br>Vui lòng quay lại sau!</p>
     <div class="loader"></div>
     <footer>© 2025 - Website của bạn</footer>
   </div>
 
-  <!-- Script phát nhạc SoundCloud khi user click lần đầu -->
+  <!-- Script FPS + Timer + Nhạc SoundCloud -->
   <script>
+    /* FPS Counter */
+    let fpsCounter = document.getElementById("fpsCounter");
+    let frames = 0;
+    let lastTime = performance.now();
+
+    function fpsLoop() {
+      frames++;
+      let now = performance.now();
+      if (now - lastTime >= 1000) {
+        fpsCounter.textContent = "FPS: " + frames;
+        frames = 0;
+        lastTime = now;
+      }
+      requestAnimationFrame(fpsLoop);
+    }
+    fpsLoop();
+
+    /* Timer bảo trì (ví dụ: 2 giờ từ bây giờ) */
+    const maintenanceTimer = document.getElementById("maintenanceTimer");
+    const endTime = new Date().getTime() + (2 * 60 * 60 * 1000); // 2 giờ
+
+    function updateTimer() {
+      const now = new Date().getTime();
+      const distance = endTime - now;
+
+      if (distance <= 0) {
+        maintenanceTimer.textContent = "✅ Bảo trì đã hoàn tất!";
+        return;
+      }
+
+      const hours = Math.floor((distance / (1000 * 60 * 60)) % 24);
+      const minutes = Math.floor((distance / (1000 * 60)) % 60);
+      const seconds = Math.floor((distance / 1000) % 60);
+
+      maintenanceTimer.textContent =
+        "Hoàn tất sau: " +
+        String(hours).padStart(2, "0") + ":" +
+        String(minutes).padStart(2, "0") + ":" +
+        String(seconds).padStart(2, "0");
+    }
+
+    setInterval(updateTimer, 1000);
+    updateTimer();
+
+    /* Nhạc SoundCloud phát khi click */
     const scPlayer = document.createElement("iframe");
     scPlayer.width = 0;
     scPlayer.height = 0;
@@ -110,5 +182,3 @@
   </script>
 </body>
 </html>
-
-
