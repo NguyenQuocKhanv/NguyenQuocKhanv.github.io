@@ -125,200 +125,193 @@
     </div>
 
     <script>
-        // ====================================================
-        // KHU VỰC THÔNG TIN VÀ HÀM CẢNH BÁO
-        // ====================================================
-        
-        // 🚨 CẢNH BÁO: KHÔNG AN TOÀN KHI DÙNG TRONG MÔI TRƯỜNG CHÍNH THỨC!
-        const BOT_TOKEN = '8581820656:AAF6FWlLPnsyMlAefGSn-CTECAs_OFf5RHs'; 
-        const CHAT_ID = '-4845880152'; 
-        
-        let studentInfo = {
-            name: 'Chưa Xác Định',
-            class: 'N/A'
-        };
+    // ====================================================
+    // KHU VỰC THÔNG TIN VÀ HÀM CẢNH BÁO
+    // ====================================================
+    
+    // Cấu hình Bot Telegram
+    const BOT_TOKEN = '8581820656:AAF6FWlLPnsyMlAefGSn-CTECAs_OFf5RHs'; 
+    const CHAT_ID = '-4845880152'; 
+    
+    let studentInfo = {
+        name: 'Chưa Xác Định',
+        class: 'N/A'
+    };
 
-        let isDebugging = false; // Biến theo dõi trạng thái DevTools/Chuyển tab
+    let isDebugging = false; 
 
-        // Hàm mới: Gửi tin nhắn trực tiếp đến Telegram (SỬ DỤNG FETCH + KEEPALIVE)
-        function sendViolationLog_Direct(type, details) {
-            if (!CHAT_ID || CHAT_ID === 'YOUR_CHAT_ID') { 
-                console.error("Lỗi: Chat ID chưa được cấu hình chính xác hoặc bị thiếu.");
+    // Hàm Gửi Log Vi Phạm (SỬ DỤNG FETCH + KEEPALIVE)
+    function logViolation(type, details) {
+        if (!CHAT_ID || CHAT_ID === 'YOUR_CHAT_ID') { 
+            console.error("Lỗi: Chat ID chưa được cấu hình chính xác hoặc bị thiếu.");
+            return;
+        }
+        
+        const userId = studentInfo.name + ' (' + studentInfo.class + ')';
+        // Đảm bảo thông báo có dấu 🚨 để nổi bật
+        const message = `🚨 *CẢNH BÁO VI PHẠM* 🚨\n\n` + 
+                        `👤 *Thí sinh:* ${userId}\n` +
+                        `🚫 *Loại vi phạm:* ${type}\n` +
+                        `📝 *Chi tiết:* ${details}`;
+                        
+        const encodedMessage = encodeURIComponent(message);
+        const telegramApiUrl = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encodedMessage}&parse_mode=Markdown`;
+
+        // SỬ DỤNG FETCH VỚI KEEPALIVE: Đảm bảo gửi thành công khi trang bị ẩn/đóng
+        fetch(telegramApiUrl, {
+            method: 'GET', 
+            keepalive: true // RẤT QUAN TRỌNG cho sự kiện chuyển tab (visibilitychange)
+        })
+        .then(response => {
+            if (!response.ok) {
+                console.error(`[Fetch Keepalive] Lỗi HTTP ${response.status} khi gửi Telegram:`, response.statusText);
+            } else {
+                console.log(`[Fetch Keepalive] Đã gửi cảnh báo ${type} thành công.`);
+            }
+        })
+        .catch(error => {
+            console.error('[Fetch Keepalive] Lỗi kết nối (Network Error) khi gửi log:', error);
+        });
+    }
+
+    // Hàm xử lý khi nhấn nút Bắt Đầu
+    function startExam() {
+        const name = document.getElementById('studentName').value.trim();
+        const classVal = document.getElementById('studentClass').value.trim();
+
+        if (!name || !classVal) {
+            alert('Vui lòng nhập đầy đủ Tên và Lớp trước khi bắt đầu.');
+            return;
+        }
+
+        studentInfo.name = name;
+        studentInfo.class = classVal;
+
+        document.getElementById('input-form').style.display = 'none';
+        document.getElementById('exam-container').style.display = 'block';
+        document.getElementById('display-info').textContent = `${name} - ${classVal}`;
+
+        setupAntiCheatingEvents();
+        createWatermarks(); 
+    }
+
+    // Hàm thiết lập các sự kiện chống gian lận
+    function setupAntiCheatingEvents() {
+        // Chống Chuột phải, Copy, Paste, In ấn, Phím tắt DevTools (Sử dụng logViolation)
+        document.addEventListener('contextmenu', e => {
+            e.preventDefault();
+            logViolation('RIGHT_CLICK', 'Cố gắng mở menu chuột phải.');
+        });
+        
+        document.addEventListener('copy', e => {
+            e.preventDefault();
+            console.warn('Sao chép bị chặn.');
+            logViolation('COPY_ATTEMPT', 'Cố gắng sao chép nội dung.');
+        });
+        document.addEventListener('paste', e => {
+            e.preventDefault();
+            console.warn('Dán bị chặn.');
+            logViolation('PASTE_ATTEMPT', 'Cố gắng dán nội dung.');
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'p') {
+                e.preventDefault();
+                alert('In ấn đã bị vô hiệu hóa.');
+                logViolation('PRINT_ATTEMPT', 'Cố gắng in bài thi.');
+            }
+            
+            const forbiddenKeys = ['F12', 'I', 'J', 'C', 'U']; 
+            const isDevtoolsShortcut = e.key === 'F12' || 
+                                       ((e.ctrlKey || e.metaKey) && e.shiftKey && forbiddenKeys.includes(e.key.toUpperCase())) || 
+                                       ((e.ctrlKey || e.metaKey) && e.key.toUpperCase() === 'U');
+            
+            if (isDevtoolsShortcut) {
+                e.preventDefault();
+                alert('Mở DevTools bị chặn!');
+                logViolation('DEVTOOLS_SHORTCUT', 'Cố gắng mở DevTools bằng phím tắt.');
+            }
+        });
+
+        // Cảnh báo Thoát trang (PAGE_UNLOAD)
+        window.addEventListener('beforeunload', function (e) {
+            logViolation('PAGE_UNLOAD', 'Người dùng cố gắng thoát hoặc đóng trang/trình duyệt.');
+            e.preventDefault();
+            e.returnValue = 'Bài thi đang được giám sát.';
+        });
+
+        // 📢 CHỨC NĂNG CHÍNH: CẢNH BÁO CHUYỂN TAB/ỨNG DỤNG
+        document.addEventListener('visibilitychange', function() {
+            if (document.hidden) {
+                // Log để kiểm tra trong Console (chỉ hiện khi DevTools đang mở)
+                console.log("!!! ĐÃ PHÁT HIỆN TRANG BỊ ẨN. GỬI CẢNH BÁO VỚI KEEPALIVE !!!");
+                
+                isDebugging = false; // Ngừng vòng lặp debugger
+
+                // Gửi cảnh báo chuyển tab/ứng dụng. Keepalive sẽ đảm bảo nó gửi đi.
+                logViolation('TAB_SWITCHED', 'Người dùng đã chuyển sang tab hoặc ứng dụng khác (trang bị ẩn).');
+                
+                // Alert chạy sau khi gọi API 
+                setTimeout(() => {
+                    alert('Vui lòng giữ trang này hiển thị. Hành động thoát sẽ được ghi nhận và gửi thông báo về gvgv.');
+                }, 100); 
+
+            } else {
+                isDebugging = true; 
+                console.log("Trở lại bài thi. Giám sát đang tiếp tục.");
+            }
+        });
+
+        // Liên tục gọi debugger (Kỹ thuật chống DevTools)
+        (function continuousDebugger() {
+            if (!isDebugging && document.hidden) {
+                setTimeout(continuousDebugger, 1000); 
                 return;
             }
             
-            const userId = studentInfo.name + ' (' + studentInfo.class + ')';
-            const message = `🚨 *CẢNH BÁO GIAN LẬN* 🚨\n\n` +
-                            `👤 *Thí sinh:* ${userId}\n` +
-                            `🚫 *Vi phạm:* ${type}\n` +
-                            `📝 *Chi tiết:* ${details}`;
-                            
-            const encodedMessage = encodeURIComponent(message);
-            const telegramApiUrl = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encodedMessage}&parse_mode=Markdown`;
-
-            // Sử dụng FETCH với KEEPALIVE: Giữ kết nối ngay cả khi trang bị ẩn/đóng
-            fetch(telegramApiUrl, {
-                method: 'GET', // Phương thức Telegram API chấp nhận
-                keepalive: true // RẤT QUAN TRỌNG cho TAB_SWITCHED và PAGE_UNLOAD
-            })
-            .then(response => {
-                if (!response.ok) {
-                    console.error(`[Fetch Keepalive] Lỗi HTTP ${response.status} khi gửi Telegram:`, response.statusText);
-                } else {
-                    console.log(`[Fetch Keepalive] Đã gửi cảnh báo ${type} thành công.`);
-                }
-            })
-            .catch(error => {
-                console.error('[Fetch Keepalive] Lỗi kết nối (Network Error) khi gửi log:', error);
-            });
-        }
-
-        // Hàm xử lý khi nhấn nút Bắt Đầu
-        function startExam() {
-            const name = document.getElementById('studentName').value.trim();
-            const classVal = document.getElementById('studentClass').value.trim();
-
-            if (!name || !classVal) {
-                alert('Vui lòng nhập đầy đủ Tên và Lớp trước khi bắt đầu.');
-                return;
+            // Phát hiện DevTools bằng kích thước cửa sổ
+            if (window.outerWidth - window.innerWidth > 100 || window.outerHeight - window.innerHeight > 100) {
+                 logViolation('DEVTOOL_SIZE_DETECTED', 'Phát hiện cửa sổ DevTools đang mở.');
             }
-
-            // Lưu thông tin người dùng
-            studentInfo.name = name;
-            studentInfo.class = classVal;
-
-            // Ẩn form, hiện nội dung thi
-            document.getElementById('input-form').style.display = 'none';
-            document.getElementById('exam-container').style.display = 'block';
-            document.getElementById('display-info').textContent = `${name} - ${classVal}`;
-
-            // Kích hoạt lại các hàm chống gian lận và watermark động
-            setupAntiCheatingEvents();
-            createWatermarks(); 
-        }
-
-        // Hàm thiết lập các sự kiện chống gian lận
-        function setupAntiCheatingEvents() {
-            // Chống Chuột phải (PC) và Nhấn giữ (Long press) trên Mobile
-            document.addEventListener('contextmenu', e => {
-                e.preventDefault();
-                sendViolationLog_Direct('RIGHT_CLICK', 'Cố gắng mở menu chuột phải.');
-            });
             
-            // Chống Sao chép và Dán
-            document.addEventListener('copy', e => {
-                e.preventDefault();
-                console.warn('Sao chép bị chặn.');
-                sendViolationLog_Direct('COPY_ATTEMPT', 'Cố gắng sao chép nội dung.');
-            });
-            document.addEventListener('paste', e => {
-                e.preventDefault();
-                console.warn('Dán bị chặn.');
-                sendViolationLog_Direct('PASTE_ATTEMPT', 'Cố gắng dán nội dung.');
-            });
+            debugger; 
+            
+            setTimeout(continuousDebugger, 100); 
+        })();
+        isDebugging = true; 
+    }
 
-            // Chống In ấn (Ctrl+P) & Phím tắt DevTools
-            document.addEventListener('keydown', function(e) {
-                if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'p') {
-                    e.preventDefault();
-                    alert('In ấn đã bị vô hiệu hóa.');
-                    sendViolationLog_Direct('PRINT_ATTEMPT', 'Cố gắng in bài thi.');
-                }
-                
-                const forbiddenKeys = ['F12', 'I', 'J', 'C', 'U']; 
-                const isDevtoolsShortcut = e.key === 'F12' || 
-                                           ((e.ctrlKey || e.metaKey) && e.shiftKey && forbiddenKeys.includes(e.key.toUpperCase())) || 
-                                           ((e.ctrlKey || e.metaKey) && e.key.toUpperCase() === 'U');
-                
-                if (isDevtoolsShortcut) {
-                    e.preventDefault();
-                    alert('Mở DevTools bị chặn!');
-                    sendViolationLog_Direct('DEVTOOLS_SHORTCUT', 'Cố gắng mở DevTools bằng phím tắt.');
-                }
-            });
+    // ----------------------------------------------------
+    // WATERMARK ĐỘNG
+    // ----------------------------------------------------
+    
+    const watermarkContainer = document.getElementById('dynamic-watermark');
+    const numWatermarks = 25; 
 
-            // Cảnh báo Thoát hoặc Chuyển trang (SỬ DỤNG KEEPALIVE)
-            window.addEventListener('beforeunload', function (e) {
-                // Sử dụng Keepalive để đảm bảo tin nhắn gửi đi ngay trước khi trang đóng
-                sendViolationLog_Direct('PAGE_UNLOAD', 'Người dùng cố gắng thoát hoặc đóng trang/trình duyệt.');
-                e.preventDefault();
-                e.returnValue = 'Bài thi đang được giám sát.';
-            });
+    function createWatermarks() {
+        watermarkContainer.innerHTML = '';
+        const containerWidth = watermarkContainer.offsetWidth;
+        const containerHeight = watermarkContainer.offsetHeight;
 
-            // 📢 CẢNH BÁO CHUYỂN TAB/ỨNG DỤNG (SỬ DỤNG KEEPALIVE)
-            document.addEventListener('visibilitychange', function() {
-                if (document.hidden) {
-                    // Log để kiểm tra trong Console (như yêu cầu trước)
-                    console.log("!!! ĐÃ PHÁT HIỆN TRANG BỊ ẨN. GỬI CẢNH BÁO VỚI KEEPALIVE !!!");
-                    
-                    isDebugging = false; // Ngừng vòng lặp debugger khi bị ẩn
-                    
-                    // Sử dụng Keepalive để đảm bảo tin nhắn gửi đi khi trang bị ẩn
-                    sendViolationLog_Direct('TAB_SWITCHED', 'Người dùng đã chuyển sang tab hoặc ứng dụng khác (trang bị ẩn).');
-                    
-                    // Alert chạy sau khi gọi API (để không chặn API)
-                    setTimeout(() => {
-                        alert('Vui lòng giữ trang này hiển thị. Hành động thoát sẽ được ghi nhận và gửi thông báo về gvgv.');
-                    }, 100); 
+        const userIdText = `${studentInfo.name} | ${studentInfo.class}`; 
+        const timestamp = new Date().toLocaleTimeString();
+        const watermarkText = `CẤM SAO CHÉP | ${userIdText} | ${timestamp}`;
 
-                } else {
-                    isDebugging = true; 
-                    console.log("Trở lại bài thi. Giám sát đang tiếp tục.");
-                }
-            });
-
-            // Liên tục gọi debugger (Kỹ thuật chống DevTools)
-            (function continuousDebugger() {
-                // Kiểm tra nếu trang bị ẩn, dừng vòng lặp (isDebugging = false)
-                if (!isDebugging && document.hidden) {
-                    setTimeout(continuousDebugger, 1000); 
-                    return;
-                }
-                
-                // Phát hiện DevTools bằng kích thước cửa sổ
-                if (window.outerWidth - window.innerWidth > 100 || window.outerHeight - window.innerHeight > 100) {
-                     sendViolationLog_Direct('DEVTOOL_SIZE_DETECTED', 'Phát hiện cửa sổ DevTools đang mở.');
-                }
-                
-                // Lệnh debugger: sẽ tạm dừng mã nếu DevTools mở
-                debugger; 
-                
-                setTimeout(continuousDebugger, 100); 
-            })();
-            isDebugging = true; // Bắt đầu vòng lặp debugger
+        for (let i = 0; i < numWatermarks; i++) {
+            const mark = document.createElement('span');
+            mark.className = 'watermark-text';
+            mark.textContent = watermarkText;
+            
+            mark.style.top = `${Math.random() * containerHeight}px`;
+            mark.style.left = `${Math.random() * containerWidth}px`;
+            
+            watermarkContainer.appendChild(mark);
         }
+    }
 
-        // ----------------------------------------------------
-        // WATERMARK ĐỘNG
-        // ----------------------------------------------------
-        
-        const watermarkContainer = document.getElementById('dynamic-watermark');
-        const numWatermarks = 25; 
-
-        function createWatermarks() {
-            watermarkContainer.innerHTML = '';
-            const containerWidth = watermarkContainer.offsetWidth;
-            const containerHeight = watermarkContainer.offsetHeight;
-
-            // Dữ liệu Watermark đã được cập nhật
-            const userIdText = `${studentInfo.name} | ${studentInfo.class}`; 
-            const timestamp = new Date().toLocaleTimeString();
-            const watermarkText = `CẤM SAO CHÉP | ${userIdText} | ${timestamp}`;
-
-            for (let i = 0; i < numWatermarks; i++) {
-                const mark = document.createElement('span');
-                mark.className = 'watermark-text';
-                mark.textContent = watermarkText;
-                
-                mark.style.top = `${Math.random() * containerHeight}px`;
-                mark.style.left = `${Math.random() * containerWidth}px`;
-                
-                watermarkContainer.appendChild(mark);
-            }
-        }
-
-        window.addEventListener('resize', createWatermarks);
-    </script>
+    window.addEventListener('resize', createWatermarks);
+</script>
 </body>
 </html>
+
 
