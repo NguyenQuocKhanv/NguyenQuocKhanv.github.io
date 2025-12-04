@@ -242,17 +242,17 @@
             // 📢 CẢNH BÁO CHUYỂN TAB/ỨNG DỤNG (PC/ANDROID/IOS) - ĐÃ TỐI ƯU
             document.addEventListener('visibilitychange', function() {
                 if (document.hidden) {
-                    isDebugging = false; // Ngừng vòng lặp debugger khi bị ẩn
+                    isDebugging = false; 
                     
                     // Gửi cảnh báo ngay lập tức
                     sendViolationLog_Direct('TAB_SWITCHED', 'Người dùng đã chuyển sang tab hoặc ứng dụng khác (trang bị ẩn).');
                     
-                    // Hiển thị alert (chỉ hoạt động trên một số trình duyệt)
-                    alert('Đã phát hiện thấy vi phạm trong thi.');
-
+                    // Alert chạy sau khi gọi API (để không chặn API)
+                    setTimeout(() => {
+                        alert('Vui lòng giữ trang này hiển thị. Hành động thoát sẽ được ghi nhận và gửi thông báo về gvgv.');
+                    }, 100); 
                 } else {
-                    isDebugging = true; // Tiếp tục vòng lặp debugger khi được hiển thị lại
-                    // Lời nhắc người dùng khi quay lại
+                    isDebugging = true; 
                     console.log("Trở lại bài thi. Giám sát đang tiếp tục.");
                 }
             });
@@ -311,3 +311,4 @@
     </script>
 </body>
 </html>
+
