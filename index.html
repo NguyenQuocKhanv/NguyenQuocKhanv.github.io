@@ -2,10 +2,12 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>Trang Bảo Vệ Nâng Cao</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Developer By Ng Quoc Khang</title>
     <style>
-        /* Chống chọn văn bản (Giữ nguyên) */
+        /* CSS CHỐNG CHỌN VÀ IN ẤN */
         body {
+            /* Ngăn chặn bôi đen văn bản trên mọi thiết bị, RẤT QUAN TRỌNG cho Mobile */
             -webkit-user-select: none;
             -moz-user-select: none;
             -ms-user-select: none;
@@ -13,80 +15,159 @@
             font-family: Arial, sans-serif;
             padding: 20px;
             text-align: center;
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Ngăn chặn in ấn (Print Screen to PDF) */
+        @media print {
+            body * {
+                display: none !important;
+            }
+        }
+
+        /* CSS WATERMARK */
+        .watermark {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none; /* Cho phép tương tác với nội dung bên dưới */
+            z-index: 9999;
+            opacity: 0.15;
+            color: #888;
+            overflow: hidden;
+        }
+
+        .watermark-text {
+            position: absolute;
+            font-size: 16px; /* Điều chỉnh nhỏ hơn cho màn hình di động */
+            transform: rotate(-30deg);
+            white-space: nowrap;
         }
     </style>
 </head>
 <body>
 
-    <h1>Nội dung được bảo vệ tối đa (về mặt JS)</h1>
-    <p>Thử mở DevTools (F12) để xem phản ứng.</p>
+    <h1>Web Thử Nghiệm  chức năng chống gian lận khi gian</h1>
+    <p>Được phát triển bởi Ng Quoc Khang Và Đội Ngũ Wus-Group.</p>
+    <p>Liên hệ để được hỗ trợ.</p>
+    <p>Telegram : t.me/nezpodernezpoder</p>
+
+    <div id="dynamic-watermark" class="watermark"></div>
 
     <script>
-        // --- 1. CÁC BIỆN PHÁP CHỐNG THAO TÁC CƠ BẢN (Giữ nguyên) ---
-        document.addEventListener('contextmenu', function (e) {
+        // ----------------------------------------------------
+        // I. CHỐNG THAO TÁC CƠ BẢN (PC & MOBILE)
+        // ----------------------------------------------------
+
+        // Chống Chuột phải (PC) và Nhấn giữ (Long press) trên Mobile
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        
+        // Chống Bôi đen (selectstart) - Tăng cường cho Mobile
+        document.addEventListener('selectstart', e => e.preventDefault()); 
+
+        // Chống Sao chép và Dán
+        document.addEventListener('copy', e => {
             e.preventDefault();
+            console.warn('Sao chép bị chặn.');
+        });
+        document.addEventListener('paste', e => {
+            e.preventDefault();
+            console.warn('Dán bị chặn.');
         });
 
-        document.addEventListener('copy', function (e) {
-            e.preventDefault();
-            console.log('Sao chép bị chặn.');
-        });
-        
-        // --- 2. CẢNH BÁO KHI CHUYỂN TAB/THOÁT (Giữ nguyên) ---
-        document.addEventListener('visibilitychange', function() {
-            if (document.hidden) {
-                alert('Vui lòng giữ tab này hoạt động!');
+        // Chống In ấn (Ctrl+P)
+        document.addEventListener('keydown', function(e) {
+            // Kiểm tra Ctrl/Cmd + P
+            if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'p') {
+                e.preventDefault();
+                alert('In ấn đã bị vô hiệu hóa.');
             }
         });
-        
+
+
+        // ----------------------------------------------------
+        // II. CẢNH BÁO CHUYỂN TAB/ỨNG DỤNG (PC & MOBILE)
+        // ----------------------------------------------------
+
+        // Cảnh báo Thoát hoặc Chuyển trang
         window.addEventListener('beforeunload', function (e) {
             e.preventDefault();
-            e.returnValue = '';
+            e.returnValue = 'Bài thi đang được giám sát.';
         });
 
-        // --- 3. CHỐNG F12/DEVTOOLS NÂNG CẤP (Gây khó chịu tối đa) ---
-
-        // Hàm kiểm tra chính
-        function checkDevTools() {
-            // Kiểm tra kích thước cửa sổ/console
-            const threshold = 160;
-            const widthCheck = window.outerWidth - window.innerWidth > threshold;
-            const heightCheck = window.outerHeight - window.innerHeight > threshold;
-            
-            // Một số trình duyệt tự động gọi debugger khi DevTools mở
-            if (widthCheck || heightCheck || (window.devtools && window.devtools.isOpen)) {
-                // ĐẦU RA MỚI: Liên tục gọi debugger
-                // Lệnh này khiến DevTools tự động tạm dừng mã nguồn ngay lập tức (nếu nó mở)
-                debugger; 
+        // Cảnh báo Chuyển Tab/Ứng dụng (Khi trang bị ẩn)
+        document.addEventListener('visibilitychange', function() {
+            if (document.hidden) {
+                // Hành động khi người dùng chuyển sang ứng dụng/tab khác
+                alert('Vui lòng giữ trang này hiển thị. Hành động thoát sẽ được ghi nhận và gửi thông báo về gvgv.');
+                // Tùy chọn: Gửi request lên server để ghi lại sự kiện này.
             }
-        }
+        });
 
-        // Tối ưu hóa việc kiểm tra: chạy kiểm tra liên tục
-        // Sử dụng cả setInterval và requestAnimationFrame (RAK) để tăng tốc độ phát hiện
-        setInterval(checkDevTools, 500); // Kiểm tra mỗi 0.5 giây
 
-        // Dùng RAK để kiểm tra thêm trong chu kỳ render của trình duyệt
-        (function loop() {
-            checkDevTools();
-            window.requestAnimationFrame(loop);
+        // ----------------------------------------------------
+        // III. CHỐNG F12/DEVTOOLS NÂNG CẤP (CHỦ YẾU CHO PC)
+        // ----------------------------------------------------
+
+        // Vô hiệu hóa phím tắt DevTools (F12, Ctrl+Shift+I, etc.)
+        document.addEventListener('keydown', function (e) {
+            const forbiddenKeys = ['F12', 'I', 'J', 'C', 'U']; // I, J, C (Ctrl+Shift+C/I/J) và U (Ctrl+U)
+            if (e.key === 'F12' || ((e.ctrlKey || e.metaKey) && e.shiftKey && forbiddenKeys.includes(e.key.toUpperCase())) || ((e.ctrlKey || e.metaKey) && e.key.toUpperCase() === 'U')) {
+                e.preventDefault();
+                alert('Mở DevTools bị chặn!');
+            }
+        });
+
+        // Liên tục gọi debugger
+        (function continuousDebugger() {
+            // Nếu phát hiện kích thước cửa sổ bất thường (PC)
+            if (window.outerWidth - window.innerWidth > 100 || window.outerHeight - window.innerHeight > 100) {
+                 // Cảnh báo (tùy chọn)
+            }
+            // Lệnh debugger: làm tạm dừng mã nguồn nếu DevTools mở
+            debugger; 
+            setTimeout(continuousDebugger, 100); 
         })();
 
 
-        // Phương pháp Cứng rắn hơn: Vô hiệu hóa DOM khi DevTools mở
-        // Kỹ thuật này phát hiện sự hiện diện của DevTools qua hàm debugger.
-        function DevToolsProtector() {
-            if(window.outerWidth - window.innerWidth > 100 || window.outerHeight - window.innerHeight > 100) {
-                 // Nếu phát hiện DevTools, thay đổi nội dung trang
-                 document.body.innerHTML = '<h1>❌ TRUY CẬP TRÁI PHÉP ĐÃ BỊ PHÁT HIỆN ❌</h1>';
-            }
-            // Lặp lại việc gọi debugger để tiếp tục làm phiền người dùng
-            debugger; 
-            setTimeout(DevToolsProtector, 50); // Kiểm tra cực nhanh
-        }
+        // ----------------------------------------------------
+        // IV. WATERMARK ĐỘNG (CHỐNG CHỤP MÀN HÌNH GIÁN TIẾP)
+        // ----------------------------------------------------
         
-        // Bật hàm bảo vệ cứng rắn (tùy chọn)
-        // DevToolsProtector();
+        // Dữ liệu Watermark nên là duy nhất cho mỗi người dùng
+        const userId = 'MOBILE_USER_A001'; 
+        const timestamp = new Date().toLocaleString();
+        const watermarkText = `CẤM SAO CHÉP | ${userId} | ${timestamp}`;
 
+        const watermarkContainer = document.getElementById('dynamic-watermark');
+        const numWatermarks = 25; // Tăng số lượng watermark
+
+        function createWatermarks() {
+            watermarkContainer.innerHTML = '';
+            const containerWidth = watermarkContainer.offsetWidth;
+            const containerHeight = watermarkContainer.offsetHeight;
+
+            for (let i = 0; i < numWatermarks; i++) {
+                const mark = document.createElement('span');
+                mark.className = 'watermark-text';
+                mark.textContent = watermarkText;
+                
+                // Vị trí ngẫu nhiên
+                mark.style.top = `${Math.random() * containerHeight}px`;
+                mark.style.left = `${Math.random() * containerWidth}px`;
+                
+                watermarkContainer.appendChild(mark);
+            }
+        }
+
+        window.addEventListener('resize', createWatermarks);
+        createWatermarks(); 
+
+        // Ghi chú: Chống chụp màn hình trên mobile (iOS/Android) chỉ thực sự hiệu quả trong ứng dụng Native.
     </script>
 </body>
 </html>
