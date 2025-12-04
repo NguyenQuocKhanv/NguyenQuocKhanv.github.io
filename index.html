@@ -5,26 +5,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Developer By Ng Quoc Khang</title>
     <style>
-        /* CSS CHỐNG CHỌN VÀ IN ẤN */
+        /* CSS CHUNG */
         body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            text-align: center;
+            height: 100vh;
+            position: relative;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* CSS CHO CHỐNG GIAN LẬN */
+        .exam-content {
             /* Ngăn chặn bôi đen văn bản trên mọi thiết bị, RẤT QUAN TRỌNG cho Mobile */
             -webkit-user-select: none;
             -moz-user-select: none;
             -ms-user-select: none;
             user-select: none;
-            font-family: Arial, sans-serif;
-            padding: 20px;
-            text-align: center;
-            height: 100vh;
-            overflow: hidden;
-            position: relative;
+            overflow: auto;
+            max-height: 100%;
+            width: 100%;
         }
 
-        /* Ngăn chặn in ấn (Print Screen to PDF) */
+        /* Ẩn Form khi vào thi, Ẩn Nội dung thi khi chưa nhập Form */
+        #input-form { display: block; }
+        #exam-container { display: none; } 
+        
+        /* CSS Ngăn in ấn */
         @media print {
-            body * {
-                display: none !important;
-            }
+            body * { display: none !important; }
         }
 
         /* CSS WATERMARK */
@@ -34,129 +47,236 @@
             left: 0;
             width: 100%;
             height: 100%;
-            pointer-events: none; /* Cho phép tương tác với nội dung bên dưới */
+            pointer-events: none;
             z-index: 9999;
             opacity: 0.15;
             color: #888;
             overflow: hidden;
         }
-
         .watermark-text {
             position: absolute;
-            font-size: 16px; /* Điều chỉnh nhỏ hơn cho màn hình di động */
+            font-size: 16px; 
             transform: rotate(-30deg);
             white-space: nowrap;
+        }
+
+        /* CSS cho Form */
+        .input-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .input-group input {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .start-button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
         }
     </style>
 </head>
 <body>
 
-    <h1>Web Thử Nghiệm  chức năng chống gian lận khi gian</h1>
-    <p>Được phát triển bởi Ng Quoc Khang Và Đội Ngũ Wus-Group.</p>
-    <p>Liên hệ để được hỗ trợ.</p>
-    <p>Telegram : t.me/nezpoder</p>
+    <div id="input-form">
+        <h2>Nhập Thông Tin Thí Sinh</h2>
+        <div class="input-group">
+            <label for="studentName">Họ và Tên:</label>
+            <input type="text" id="studentName" placeholder="Ví dụ: Nguyễn Văn A" required>
+        </div>
+        <div class="input-group">
+            <label for="studentClass">Lớp/Mã số:</label>
+            <input type="text" id="studentClass" placeholder="Ví dụ: K12A5" required>
+        </div>
+        <button class="start-button" onclick="startExam()">Bắt Đầu Bài Thi</button>
+    </div>
 
-    <div id="dynamic-watermark" class="watermark"></div>
+    <div id="exam-container">
+        <div class="exam-content">
+            <h1>Web Thử Nghiệm chức năng chống gian lận khi gian</h1>
+            <p>Được phát triển bởi Ng Quoc Khang Và Đội Ngũ Wus-Group.</p>
+            <p>Liên hệ để được hỗ trợ.</p>
+            <p>Telegram : t.me/nezpoder</p>
+            <p>Xin chào <span id="display-info" style="font-weight: bold; color: red;"></span>. Bạn đã sẵn sàng làm bài.</p>
+            
+            <div style="height: 500px; border: 1px solid #eee; margin-top: 20px; padding: 15px; background: #f9f9f9; text-align: left;">
+                Đây là khu vực chứa nội dung bài thi. Nội dung này sẽ được bảo vệ.
+                <br><br>
+                1. Hãy giải thích định luật Ohm bằng công thức toán học và các đơn vị tương ứng.
+                <br>
+                **Đáp án:** Định luật Ohm phát biểu rằng hiệu điện thế ($V$) trên một vật dẫn tỷ lệ thuận với cường độ dòng điện ($I$) chạy qua nó, với hệ số tỷ lệ là điện trở ($R$). Công thức là: $V = I \cdot R$ (Volt = Ampere $\cdot$ Ohm).
+            </div>
+        </div>
+        <div id="dynamic-watermark" class="watermark"></div>
+    </div>
 
     <script>
-        // ----------------------------------------------------
-        // I. CHỐNG THAO TÁC CƠ BẢN (PC & MOBILE)
-        // ----------------------------------------------------
-
-        // Chống Chuột phải (PC) và Nhấn giữ (Long press) trên Mobile
-        document.addEventListener('contextmenu', e => e.preventDefault());
+        // ====================================================
+        // KHU VỰC THÔNG TIN VÀ HÀM CẢNH BÁO
+        // ====================================================
         
-        // Chống Bôi đen (selectstart) - Tăng cường cho Mobile
-        document.addEventListener('selectstart', e => e.preventDefault()); 
+        // 🚨 CẢNH BÁO: KHÔNG AN TOÀN KHI DÙNG TRONG MÔI TRƯỜNG CHÍNH THỨC!
+        const BOT_TOKEN = '8581820656:AAHyY__ggRnW7y-F4XcmeL8B8FbfQ8TpMck'; 
+        const CHAT_ID = 'YOUR_CHAT_ID'; // <--- THAY THẾ BẰNG CHAT ID THỰC CỦA BẠN!
+        
+        let studentInfo = {
+            name: 'Chưa Xác Định',
+            class: 'N/A'
+        };
 
-        // Chống Sao chép và Dán
-        document.addEventListener('copy', e => {
-            e.preventDefault();
-            console.warn('Sao chép bị chặn.');
-        });
-        document.addEventListener('paste', e => {
-            e.preventDefault();
-            console.warn('Dán bị chặn.');
-        });
+        // Hàm mới: Gửi tin nhắn trực tiếp đến Telegram (KHÔNG AN TOÀN)
+        function sendViolationLog_Direct(type, details) {
+            if (CHAT_ID === 'YOUR_CHAT_ID') {
+                console.error("Vui lòng thay thế 'YOUR_CHAT_ID' bằng Chat ID thực tế của bạn.");
+                return;
+            }
+            
+            const userId = studentInfo.name + ' (' + studentInfo.class + ')';
+            const message = `🚨 *CẢNH BÁO GIAN LẬN* 🚨\n\n` +
+                            `👤 *Thí sinh:* ${userId}\n` +
+                            `🚫 *Vi phạm:* ${type}\n` +
+                            `📝 *Chi tiết:* ${details}`;
+                            
+            const encodedMessage = encodeURIComponent(message);
+            const telegramApiUrl = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encodedMessage}&parse_mode=Markdown`;
 
-        // Chống In ấn (Ctrl+P)
-        document.addEventListener('keydown', function(e) {
-            // Kiểm tra Ctrl/Cmd + P
-            if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'p') {
+            fetch(telegramApiUrl)
+                .then(response => {
+                    if (!response.ok) {
+                        console.error('Lỗi khi gửi cảnh báo Telegram:', response.statusText);
+                    } else {
+                        console.log(`Đã gửi cảnh báo ${type} thành công.`);
+                    }
+                })
+                .catch(error => console.error('Lỗi kết nối khi gửi log:', error));
+        }
+
+        // Hàm xử lý khi nhấn nút Bắt Đầu
+        function startExam() {
+            const name = document.getElementById('studentName').value.trim();
+            const classVal = document.getElementById('studentClass').value.trim();
+
+            if (!name || !classVal) {
+                alert('Vui lòng nhập đầy đủ Tên và Lớp trước khi bắt đầu.');
+                return;
+            }
+
+            // Lưu thông tin người dùng
+            studentInfo.name = name;
+            studentInfo.class = classVal;
+
+            // Ẩn form, hiện nội dung thi
+            document.getElementById('input-form').style.display = 'none';
+            document.getElementById('exam-container').style.display = 'block';
+            document.getElementById('display-info').textContent = `${name} - ${classVal}`;
+
+            // Kích hoạt lại các hàm chống gian lận và watermark động
+            setupAntiCheatingEvents();
+            createWatermarks(); 
+        }
+
+        // Hàm thiết lập các sự kiện chống gian lận
+        function setupAntiCheatingEvents() {
+            // Chống Chuột phải (PC) và Nhấn giữ (Long press) trên Mobile
+            document.addEventListener('contextmenu', e => {
                 e.preventDefault();
-                alert('In ấn đã bị vô hiệu hóa.');
-            }
-        });
+                sendViolationLog_Direct('RIGHT_CLICK', 'Cố gắng mở menu chuột phải.');
+            });
+            
+            // Chống Bôi đen (selectstart)
+            document.addEventListener('selectstart', e => e.preventDefault()); 
 
-
-        // ----------------------------------------------------
-        // II. CẢNH BÁO CHUYỂN TAB/ỨNG DỤNG (PC & MOBILE)
-        // ----------------------------------------------------
-
-        // Cảnh báo Thoát hoặc Chuyển trang
-        window.addEventListener('beforeunload', function (e) {
-            e.preventDefault();
-            e.returnValue = 'Bài thi đang được giám sát.';
-        });
-
-        // Cảnh báo Chuyển Tab/Ứng dụng (Khi trang bị ẩn)
-        document.addEventListener('visibilitychange', function() {
-            if (document.hidden) {
-                // Hành động khi người dùng chuyển sang ứng dụng/tab khác
-                alert('Vui lòng giữ trang này hiển thị. Hành động thoát sẽ được ghi nhận và gửi thông báo về gvgv.');
-                // Tùy chọn: Gửi request lên server để ghi lại sự kiện này.
-            }
-        });
-
-
-        // ----------------------------------------------------
-        // III. CHỐNG F12/DEVTOOLS NÂNG CẤP (CHỦ YẾU CHO PC)
-        // ----------------------------------------------------
-
-        // Vô hiệu hóa phím tắt DevTools (F12, Ctrl+Shift+I, etc.)
-        document.addEventListener('keydown', function (e) {
-            const forbiddenKeys = ['F12', 'I', 'J', 'C', 'U']; // I, J, C (Ctrl+Shift+C/I/J) và U (Ctrl+U)
-            if (e.key === 'F12' || ((e.ctrlKey || e.metaKey) && e.shiftKey && forbiddenKeys.includes(e.key.toUpperCase())) || ((e.ctrlKey || e.metaKey) && e.key.toUpperCase() === 'U')) {
+            // Chống Sao chép và Dán
+            document.addEventListener('copy', e => {
                 e.preventDefault();
-                alert('Mở DevTools bị chặn!');
-            }
-        });
+                console.warn('Sao chép bị chặn.');
+                sendViolationLog_Direct('COPY_ATTEMPT', 'Cố gắng sao chép nội dung.');
+            });
+            document.addEventListener('paste', e => {
+                e.preventDefault();
+                console.warn('Dán bị chặn.');
+                sendViolationLog_Direct('PASTE_ATTEMPT', 'Cố gắng dán nội dung.');
+            });
 
-        // Liên tục gọi debugger
-        (function continuousDebugger() {
-            // Nếu phát hiện kích thước cửa sổ bất thường (PC)
-            if (window.outerWidth - window.innerWidth > 100 || window.outerHeight - window.innerHeight > 100) {
-                 // Cảnh báo (tùy chọn)
-            }
-            // Lệnh debugger: làm tạm dừng mã nguồn nếu DevTools mở
-            debugger; 
-            setTimeout(continuousDebugger, 100); 
-        })();
+            // Chống In ấn (Ctrl+P)
+            document.addEventListener('keydown', function(e) {
+                if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'p') {
+                    e.preventDefault();
+                    alert('In ấn đã bị vô hiệu hóa.');
+                    sendViolationLog_Direct('PRINT_ATTEMPT', 'Cố gắng in bài thi.');
+                }
+                
+                // Vô hiệu hóa phím tắt DevTools (F12, Ctrl+Shift+I, etc.)
+                const forbiddenKeys = ['F12', 'I', 'J', 'C', 'U']; 
+                const isDevtoolsShortcut = e.key === 'F12' || 
+                                           ((e.ctrlKey || e.metaKey) && e.shiftKey && forbiddenKeys.includes(e.key.toUpperCase())) || 
+                                           ((e.ctrlKey || e.metaKey) && e.key.toUpperCase() === 'U');
+                
+                if (isDevtoolsShortcut) {
+                    e.preventDefault();
+                    alert('Mở DevTools bị chặn!');
+                    sendViolationLog_Direct('DEVTOOLS_SHORTCUT', 'Cố gắng mở DevTools bằng phím tắt.');
+                }
+            });
 
+            // Cảnh báo Thoát hoặc Chuyển trang
+            window.addEventListener('beforeunload', function (e) {
+                e.preventDefault();
+                e.returnValue = 'Bài thi đang được giám sát.';
+            });
+
+            // Cảnh báo Chuyển Tab/Ứng dụng (Khi trang bị ẩn)
+            document.addEventListener('visibilitychange', function() {
+                if (document.hidden) {
+                    alert('Vui lòng giữ trang này hiển thị. Hành động thoát sẽ được ghi nhận và gửi thông báo về gvgv.');
+                    sendViolationLog_Direct('TAB_SWITCH', 'Người dùng đã chuyển tab/ứng dụng.');
+                }
+            });
+
+            // Liên tục gọi debugger
+            (function continuousDebugger() {
+                if (window.outerWidth - window.innerWidth > 100 || window.outerHeight - window.innerHeight > 100) {
+                     sendViolationLog_Direct('DEVTOOLS_SIZE_DETECTED', 'Phát hiện cửa sổ DevTools đang mở.');
+                }
+                debugger; 
+                setTimeout(continuousDebugger, 100); 
+            })();
+        }
 
         // ----------------------------------------------------
-        // IV. WATERMARK ĐỘNG (CHỐNG CHỤP MÀN HÌNH GIÁN TIẾP)
+        // WATERMARK ĐỘNG
         // ----------------------------------------------------
         
-        // Dữ liệu Watermark nên là duy nhất cho mỗi người dùng
-        const userId = 'MOBILE_USER_A001'; 
-        const timestamp = new Date().toLocaleString();
-        const watermarkText = `CẤM SAO CHÉP | ${userId} | ${timestamp}`;
-
         const watermarkContainer = document.getElementById('dynamic-watermark');
-        const numWatermarks = 25; // Tăng số lượng watermark
+        const numWatermarks = 25; 
 
         function createWatermarks() {
             watermarkContainer.innerHTML = '';
             const containerWidth = watermarkContainer.offsetWidth;
             const containerHeight = watermarkContainer.offsetHeight;
 
+            // Dữ liệu Watermark đã được cập nhật
+            const userIdText = `${studentInfo.name} | ${studentInfo.class}`; 
+            const timestamp = new Date().toLocaleTimeString();
+            const watermarkText = `CẤM SAO CHÉP | ${userIdText} | ${timestamp}`;
+
             for (let i = 0; i < numWatermarks; i++) {
                 const mark = document.createElement('span');
                 mark.className = 'watermark-text';
                 mark.textContent = watermarkText;
                 
-                // Vị trí ngẫu nhiên
                 mark.style.top = `${Math.random() * containerHeight}px`;
                 mark.style.left = `${Math.random() * containerWidth}px`;
                 
@@ -165,10 +285,9 @@
         }
 
         window.addEventListener('resize', createWatermarks);
-        createWatermarks(); 
 
-        // Ghi chú: Chống chụp màn hình trên mobile (iOS/Android) chỉ thực sự hiệu quả trong ứng dụng Native.
+        // --- KHÔNG GỌI setupAntiCheatingEvents() và createWatermarks() Ở ĐÂY ---
+        // Chúng chỉ được gọi sau khi người dùng nhấn nút "Bắt Đầu Bài Thi"
     </script>
 </body>
 </html>
-
