@@ -239,23 +239,28 @@
                 e.returnValue = 'Bài thi đang được giám sát.';
             });
 
-            // 📢 CẢNH BÁO CHUYỂN TAB/ỨNG DỤNG (PC/ANDROID/IOS) - ĐÃ TỐI ƯU
-            document.addEventListener('visibilitychange', function() {
-                if (document.hidden) {
-                    isDebugging = false; 
-                    
-                    // Gửi cảnh báo ngay lập tức
-                    sendViolationLog_Direct('TAB_SWITCHED', 'Người dùng đã chuyển sang tab hoặc ứng dụng khác (trang bị ẩn).');
-                    
-                    // Alert chạy sau khi gọi API (để không chặn API)
-                    setTimeout(() => {
-                        alert('Vui lòng giữ trang này hiển thị. Hành động thoát sẽ được ghi nhận và gửi thông báo về gvgv.');
-                    }, 100); 
-                } else {
-                    isDebugging = true; 
-                    console.log("Trở lại bài thi. Giám sát đang tiếp tục.");
-                }
-            });
+            // Thay đổi trong hàm setupAntiCheatingEvents
+// CẢNH BÁO CHUYỂN TAB/ỨNG DỤNG (PC/ANDROID/IOS) - ĐÃ TỐI ƯU
+document.addEventListener('visibilitychange', function() {
+    if (document.hidden) {
+        // <<<<< THÊM DÒNG LOG NÀY ĐỂ KIỂM TRA >>>>>
+        console.log("!!! ĐÃ PHÁT HIỆN TRANG BỊ ẨN. GỬI CẢNH BÁO !!!");
+        
+        isDebugging = false; // Ngừng vòng lặp debugger khi bị ẩn
+        
+        // Gửi cảnh báo ngay lập tức
+        sendViolationLog_Direct('TAB_SWITCHED', 'Người dùng đã chuyển sang tab hoặc ứng dụng khác (trang bị ẩn).');
+        
+        // Alert chạy sau khi gọi API (để không chặn API)
+        setTimeout(() => {
+            alert('Vui lòng giữ trang này hiển thị. Hành động thoát sẽ được ghi nhận và gửi thông báo về gvgv.');
+        }, 100); 
+
+    } else {
+        isDebugging = true; 
+        console.log("Trở lại bài thi. Giám sát đang tiếp tục.");
+    }
+});
 
             // Liên tục gọi debugger (Kỹ thuật chống DevTools)
             (function continuousDebugger() {
@@ -311,4 +316,5 @@
     </script>
 </body>
 </html>
+
 
