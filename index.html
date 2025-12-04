@@ -140,7 +140,7 @@
 
         let isDebugging = false; // Biến theo dõi trạng thái DevTools/Chuyển tab
 
-        // Hàm mới: Gửi tin nhắn trực tiếp đến Telegram (KHÔNG AN TOÀN)
+        // Hàm mới: Gửi tin nhắn trực tiếp đến Telegram (SỬ DỤNG FETCH + KEEPALIVE)
         function sendViolationLog_Direct(type, details) {
             if (!CHAT_ID || CHAT_ID === 'YOUR_CHAT_ID') { 
                 console.error("Lỗi: Chat ID chưa được cấu hình chính xác hoặc bị thiếu.");
@@ -148,25 +148,29 @@
             }
             
             const userId = studentInfo.name + ' (' + studentInfo.class + ')';
-            const message = ` *CẢNH BÁO GIAN LẬN* \n\n` +
-                            ` *Thí sinh:* ${userId}\n` +
-                            ` *Vi phạm:* ${type}\n` +
-                            ` *Chi tiết:* ${details}`;
+            const message = `🚨 *CẢNH BÁO GIAN LẬN* 🚨\n\n` +
+                            `👤 *Thí sinh:* ${userId}\n` +
+                            `🚫 *Vi phạm:* ${type}\n` +
+                            `📝 *Chi tiết:* ${details}`;
                             
             const encodedMessage = encodeURIComponent(message);
             const telegramApiUrl = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encodedMessage}&parse_mode=Markdown`;
 
-            fetch(telegramApiUrl)
-                .then(response => {
-                    if (!response.ok) {
-                        console.error(`Lỗi HTTP ${response.status} khi gửi Telegram:`, response.statusText);
-                    } else {
-                        console.log(`Đã gửi cảnh báo ${type} thành công.`);
-                    }
-                })
-                .catch(error => {
-                    console.error('Lỗi kết nối (Network Error) khi gửi log:', error);
-                });
+            // Sử dụng FETCH với KEEPALIVE: Giữ kết nối ngay cả khi trang bị ẩn/đóng
+            fetch(telegramApiUrl, {
+                method: 'GET', // Phương thức Telegram API chấp nhận
+                keepalive: true // RẤT QUAN TRỌNG cho TAB_SWITCHED và PAGE_UNLOAD
+            })
+            .then(response => {
+                if (!response.ok) {
+                    console.error(`[Fetch Keepalive] Lỗi HTTP ${response.status} khi gửi Telegram:`, response.statusText);
+                } else {
+                    console.log(`[Fetch Keepalive] Đã gửi cảnh báo ${type} thành công.`);
+                }
+            })
+            .catch(error => {
+                console.error('[Fetch Keepalive] Lỗi kết nối (Network Error) khi gửi log:', error);
+            });
         }
 
         // Hàm xử lý khi nhấn nút Bắt Đầu
@@ -233,34 +237,35 @@
                 }
             });
 
-            // Cảnh báo Thoát hoặc Chuyển trang
+            // Cảnh báo Thoát hoặc Chuyển trang (SỬ DỤNG KEEPALIVE)
             window.addEventListener('beforeunload', function (e) {
+                // Sử dụng Keepalive để đảm bảo tin nhắn gửi đi ngay trước khi trang đóng
+                sendViolationLog_Direct('PAGE_UNLOAD', 'Người dùng cố gắng thoát hoặc đóng trang/trình duyệt.');
                 e.preventDefault();
                 e.returnValue = 'Bài thi đang được giám sát.';
             });
 
-            // Thay đổi trong hàm setupAntiCheatingEvents
-// CẢNH BÁO CHUYỂN TAB/ỨNG DỤNG (PC/ANDROID/IOS) - ĐÃ TỐI ƯU
-document.addEventListener('visibilitychange', function() {
-    if (document.hidden) {
-        // <<<<< THÊM DÒNG LOG NÀY ĐỂ KIỂM TRA >>>>>
-        console.log("!!! ĐÃ PHÁT HIỆN TRANG BỊ ẨN. GỬI CẢNH BÁO !!!");
-        
-        isDebugging = false; // Ngừng vòng lặp debugger khi bị ẩn
-        
-        // Gửi cảnh báo ngay lập tức
-        sendViolationLog_Direct('TAB_SWITCHED', 'Người dùng đã chuyển sang tab hoặc ứng dụng khác (trang bị ẩn).');
-        
-        // Alert chạy sau khi gọi API (để không chặn API)
-        setTimeout(() => {
-            alert('Vui lòng giữ trang này hiển thị. Hành động thoát sẽ được ghi nhận và gửi thông báo về gvgv.');
-        }, 100); 
+            // 📢 CẢNH BÁO CHUYỂN TAB/ỨNG DỤNG (SỬ DỤNG KEEPALIVE)
+            document.addEventListener('visibilitychange', function() {
+                if (document.hidden) {
+                    // Log để kiểm tra trong Console (như yêu cầu trước)
+                    console.log("!!! ĐÃ PHÁT HIỆN TRANG BỊ ẨN. GỬI CẢNH BÁO VỚI KEEPALIVE !!!");
+                    
+                    isDebugging = false; // Ngừng vòng lặp debugger khi bị ẩn
+                    
+                    // Sử dụng Keepalive để đảm bảo tin nhắn gửi đi khi trang bị ẩn
+                    sendViolationLog_Direct('TAB_SWITCHED', 'Người dùng đã chuyển sang tab hoặc ứng dụng khác (trang bị ẩn).');
+                    
+                    // Alert chạy sau khi gọi API (để không chặn API)
+                    setTimeout(() => {
+                        alert('Vui lòng giữ trang này hiển thị. Hành động thoát sẽ được ghi nhận và gửi thông báo về gvgv.');
+                    }, 100); 
 
-    } else {
-        isDebugging = true; 
-        console.log("Trở lại bài thi. Giám sát đang tiếp tục.");
-    }
-});
+                } else {
+                    isDebugging = true; 
+                    console.log("Trở lại bài thi. Giám sát đang tiếp tục.");
+                }
+            });
 
             // Liên tục gọi debugger (Kỹ thuật chống DevTools)
             (function continuousDebugger() {
@@ -316,6 +321,3 @@ document.addEventListener('visibilitychange', function() {
     </script>
 </body>
 </html>
-
-
-
