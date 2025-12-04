@@ -112,9 +112,9 @@
             <p>Xin chào <span id="display-info" style="font-weight: bold; color: red;"></span>. Bạn đã sẵn sàng làm bài.</p>
             
             <div style="height: 500px; border: 1px solid #eee; margin-top: 20px; padding: 15px; background: #f9f9f9; text-align: left;">
-                <br><br>
+                <br><br><br>
                 1. Hãy giải thích định luật Ohm bằng công thức toán học và các đơn vị tương ứng.
-                <br>
+                <br><br>
                 **Đáp án:** Định luật Ohm phát biểu rằng hiệu điện thế ($V$) trên một vật dẫn tỷ lệ thuận với cường độ dòng điện ($I$) chạy qua nó, với hệ số tỷ lệ là điện trở ($R$). Công thức là: $V = I \cdot R$ (Volt = Ampere $\cdot$ Ohm).
             </div>
         </div>
@@ -128,7 +128,8 @@
         
         // 🚨 CẢNH BÁO: KHÔNG AN TOÀN KHI DÙNG TRONG MÔI TRƯỜNG CHÍNH THỨC!
         const BOT_TOKEN = '8581820656:AAF6FWlLPnsyMlAefGSn-CTECAs_OFf5RHs'; 
-        const CHAT_ID = '-4845880152'; // <--- THAY THẾ BẰNG CHAT ID THỰC CỦA BẠN!
+        // CHAT ID ĐÃ ĐƯỢC CẬP NHẬT TỪ MÃ BẠN CUNG CẤP LẦN TRƯỚC:
+        const CHAT_ID = '-4845880152'; 
         
         let studentInfo = {
             name: 'Chưa Xác Định',
@@ -137,8 +138,9 @@
 
         // Hàm mới: Gửi tin nhắn trực tiếp đến Telegram (KHÔNG AN TOÀN)
         function sendViolationLog_Direct(type, details) {
-            if (CHAT_ID === '4845880152') {
-                console.error("Vui lòng thay thế 'YOUR_CHAT_ID' bằng Chat ID thực tế của bạn.");
+            // Đã sửa lỗi logic: kiểm tra Chat ID có giá trị và không phải là một số riêng lẻ
+            if (!CHAT_ID || CHAT_ID === 'YOUR_CHAT_ID') { 
+                console.error("Lỗi: Chat ID chưa được cấu hình chính xác hoặc bị thiếu.");
                 return;
             }
             
@@ -154,12 +156,17 @@
             fetch(telegramApiUrl)
                 .then(response => {
                     if (!response.ok) {
-                        console.error('Lỗi khi gửi cảnh báo Telegram:', response.statusText);
+                        // Log lỗi HTTP nếu có (ví dụ: 404, 400 Bad Request)
+                        console.error(`Lỗi HTTP ${response.status} khi gửi Telegram:`, response.statusText);
                     } else {
+                        // Log thành công
                         console.log(`Đã gửi cảnh báo ${type} thành công.`);
                     }
                 })
-                .catch(error => console.error('Lỗi kết nối khi gửi log:', error));
+                .catch(error => {
+                    // Log lỗi mạng (ví dụ: CORS bị chặn)
+                    console.error('Lỗi kết nối (Network Error) khi gửi log:', error);
+                });
         }
 
         // Hàm xử lý khi nhấn nút Bắt Đầu
@@ -284,12 +291,6 @@
         }
 
         window.addEventListener('resize', createWatermarks);
-
-        // --- KHÔNG GỌI setupAntiCheatingEvents() và createWatermarks() Ở ĐÂY ---
-        // Chúng chỉ được gọi sau khi người dùng nhấn nút "Bắt Đầu Bài Thi"
     </script>
 </body>
 </html>
-
-
-
