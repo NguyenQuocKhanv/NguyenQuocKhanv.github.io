@@ -1,1 +1,105 @@
-Lemii cte
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Trang Ngăn Chặn Thao Tác</title>
+    <style>
+        /* CSS để chống chọn văn bản */
+        body {
+            -webkit-user-select: none;  /* Chrome, Safari, Opera */
+            -moz-user-select: none;     /* Firefox */
+            -ms-user-select: none;      /* Internet Explorer/Edge */
+            user-select: none;          /* Tiêu chuẩn */
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Đây là nội dung được bảo vệ</h1>
+    <p>Bạn không thể sao chép hoặc chọn văn bản này.</p>
+    <p>Thử nhấn F12 hoặc nhấp chuột phải để kiểm tra các chức năng bảo vệ.</p>
+
+    <script>
+        // 1. CHỐNG SAO CHÉP, CHỌN VÀ DÁN (PASTE)
+        document.addEventListener('contextmenu', function (e) {
+            e.preventDefault(); // Chống nhấp chuột phải
+        });
+
+        document.addEventListener('copy', function (e) {
+            e.preventDefault(); // Chống sao chép
+            alert('Sao chép không được phép!');
+        });
+
+        document.addEventListener('paste', function (e) {
+            e.preventDefault(); // Chống dán
+            alert('Dán không được phép!');
+        });
+
+        // 2. CHỐNG F12 VÀ DEVTOOLS
+        // Phương pháp đơn giản: Ngăn chặn phím F12
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I') || (e.ctrlKey && e.shiftKey && e.key === 'J') || (e.ctrlKey && e.key === 'U')) {
+                e.preventDefault();
+                alert('Mở DevTools bị chặn!');
+            }
+        });
+
+        // Phương pháp phức tạp hơn: Kiểm tra kích thước cửa sổ/console (không hoàn toàn tin cậy)
+        var threshold = 160;
+        var devtools = {
+            isOpen: false,
+            orientation: undefined
+        };
+
+        var checkDevTools = function() {
+            var widthThreshold = window.outerWidth - window.innerWidth > threshold;
+            var heightThreshold = window.outerHeight - window.innerHeight > threshold;
+            var orientation = widthThreshold ? 'vertical' : 'horizontal';
+
+            if (!(heightThreshold && widthThreshold) &&
+                ((window.Firebug && window.Firebug.chrome && window.Firebug.chrome.is  active) || widthThreshold || heightThreshold)) {
+                if (!devtools.isOpen || devtools.orientation !== orientation) {
+                    devtools.isOpen = true;
+                    devtools.orientation = orientation;
+                    // THỰC HIỆN HÀNH ĐỘNG KHI DEVTOOLS MỞ
+                    document.body.innerHTML = '<h1>DevTools đã bị phát hiện và trang này đã bị khóa.</h1>';
+                }
+            } else {
+                devtools.isOpen = false;
+                devtools.orientation = undefined;
+            }
+        };
+
+        // Lặp lại việc kiểm tra
+        setInterval(checkDevTools, 500);
+
+
+        // 3. CẢNH BÁO KHI THOÁT TAB (Đóng trình duyệt/chuyển trang)
+        window.addEventListener('beforeunload', function (e) {
+            // Chuỗi sau đây sẽ không được hiển thị trong các trình duyệt hiện đại
+            // Thay vào đó, trình duyệt sẽ hiển thị thông báo mặc định của nó
+            e.preventDefault();
+            e.returnValue = ''; // Bắt buộc phải có dòng này để kích hoạt hộp thoại cảnh báo
+        });
+
+        // 4. CẢNH BÁO KHI CHUYỂN TAB (Ẩn trình duyệt)
+        document.addEventListener('visibilitychange', function() {
+            if (document.hidden) {
+                // Người dùng chuyển sang tab/cửa sổ khác
+                alert('Vui lòng không thoát khỏi tab này!');
+            } else {
+                // Người dùng quay lại tab
+                console.log('Chào mừng trở lại!');
+            }
+        });
+
+        // 5. CHỐNG CHỤP MÀN HÌNH (RẤT KHÓ VÀ HẦU NHƯ KHÔNG THỂ NGĂN CHẶN HIỆU QUẢ VỚI HTML/JS)
+        // Lưu ý: Không có cách nào đáng tin cậy để ngăn chặn chụp màn hình trên máy tính người dùng
+        // Các đoạn mã ở trên là những gì tối đa có thể làm được.
+
+    </script>
+</body>
+</html>
