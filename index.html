@@ -17,15 +17,15 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            /* Tăng cường chống bôi đen cho toàn bộ body, quan trọng cho di động */
+            -webkit-user-select: none; 
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
         }
 
         /* CSS CHO CHỐNG GIAN LẬN */
         .exam-content {
-            /* Ngăn chặn bôi đen văn bản trên mọi thiết bị, RẤT QUAN TRỌNG cho Mobile */
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
             overflow: auto;
             max-height: 100%;
             width: 100%;
@@ -76,6 +76,9 @@
             box-sizing: border-box;
             border: 1px solid #ccc;
             border-radius: 4px;
+            /* Cho phép nhập liệu nhưng không cho bôi đen */
+            -webkit-user-select: text; 
+            user-select: text; 
         }
         .start-button {
             padding: 10px 20px;
@@ -128,7 +131,6 @@
         
         // 🚨 CẢNH BÁO: KHÔNG AN TOÀN KHI DÙNG TRONG MÔI TRƯỜNG CHÍNH THỨC!
         const BOT_TOKEN = '8581820656:AAF6FWlLPnsyMlAefGSn-CTECAs_OFf5RHs'; 
-        // CHAT ID ĐÃ ĐƯỢC CẬP NHẬT TỪ MÃ BẠN CUNG CẤP LẦN TRƯỚC:
         const CHAT_ID = '-4845880152'; 
         
         let studentInfo = {
@@ -136,19 +138,20 @@
             class: 'N/A'
         };
 
+        let isDebugging = false; // Biến theo dõi trạng thái DevTools/Chuyển tab
+
         // Hàm mới: Gửi tin nhắn trực tiếp đến Telegram (KHÔNG AN TOÀN)
         function sendViolationLog_Direct(type, details) {
-            // Đã sửa lỗi logic: kiểm tra Chat ID có giá trị và không phải là một số riêng lẻ
             if (!CHAT_ID || CHAT_ID === 'YOUR_CHAT_ID') { 
                 console.error("Lỗi: Chat ID chưa được cấu hình chính xác hoặc bị thiếu.");
                 return;
             }
             
             const userId = studentInfo.name + ' (' + studentInfo.class + ')';
-            const message = `🚨 *CẢNH BÁO GIAN LẬN* 🚨\n\n` +
-                            `👤 *Thí sinh:* ${userId}\n` +
-                            `🚫 *Vi phạm:* ${type}\n` +
-                            `📝 *Chi tiết:* ${details}`;
+            const message = ` *CẢNH BÁO GIAN LẬN* \n\n` +
+                            ` *Thí sinh:* ${userId}\n` +
+                            ` *Vi phạm:* ${type}\n` +
+                            ` *Chi tiết:* ${details}`;
                             
             const encodedMessage = encodeURIComponent(message);
             const telegramApiUrl = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encodedMessage}&parse_mode=Markdown`;
@@ -156,15 +159,12 @@
             fetch(telegramApiUrl)
                 .then(response => {
                     if (!response.ok) {
-                        // Log lỗi HTTP nếu có (ví dụ: 404, 400 Bad Request)
                         console.error(`Lỗi HTTP ${response.status} khi gửi Telegram:`, response.statusText);
                     } else {
-                        // Log thành công
                         console.log(`Đã gửi cảnh báo ${type} thành công.`);
                     }
                 })
                 .catch(error => {
-                    // Log lỗi mạng (ví dụ: CORS bị chặn)
                     console.error('Lỗi kết nối (Network Error) khi gửi log:', error);
                 });
         }
@@ -201,9 +201,6 @@
                 sendViolationLog_Direct('RIGHT_CLICK', 'Cố gắng mở menu chuột phải.');
             });
             
-            // Chống Bôi đen (selectstart)
-            document.addEventListener('selectstart', e => e.preventDefault()); 
-
             // Chống Sao chép và Dán
             document.addEventListener('copy', e => {
                 e.preventDefault();
@@ -216,7 +213,7 @@
                 sendViolationLog_Direct('PASTE_ATTEMPT', 'Cố gắng dán nội dung.');
             });
 
-            // Chống In ấn (Ctrl+P)
+            // Chống In ấn (Ctrl+P) & Phím tắt DevTools
             document.addEventListener('keydown', function(e) {
                 if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'p') {
                     e.preventDefault();
@@ -224,7 +221,6 @@
                     sendViolationLog_Direct('PRINT_ATTEMPT', 'Cố gắng in bài thi.');
                 }
                 
-                // Vô hiệu hóa phím tắt DevTools (F12, Ctrl+Shift+I, etc.)
                 const forbiddenKeys = ['F12', 'I', 'J', 'C', 'U']; 
                 const isDevtoolsShortcut = e.key === 'F12' || 
                                            ((e.ctrlKey || e.metaKey) && e.shiftKey && forbiddenKeys.includes(e.key.toUpperCase())) || 
@@ -243,22 +239,43 @@
                 e.returnValue = 'Bài thi đang được giám sát.';
             });
 
-            // Cảnh báo Chuyển Tab/Ứng dụng (Khi trang bị ẩn)
+            // 📢 CẢNH BÁO CHUYỂN TAB/ỨNG DỤNG (PC/ANDROID/IOS) - ĐÃ TỐI ƯU
             document.addEventListener('visibilitychange', function() {
                 if (document.hidden) {
-                    alert('Vui lòng giữ trang này hiển thị. Hành động thoát sẽ được ghi nhận và gửi thông báo về gvgv.');
-                    sendViolationLog_Direct('TAB_SWITCH', 'Người dùng đã chuyển tab/ứng dụng.');
+                    isDebugging = false; // Ngừng vòng lặp debugger khi bị ẩn
+                    
+                    // Gửi cảnh báo ngay lập tức
+                    sendViolationLog_Direct('TAB_SWITCHED', 'Người dùng đã chuyển sang tab hoặc ứng dụng khác (trang bị ẩn).');
+                    
+                    // Hiển thị alert (chỉ hoạt động trên một số trình duyệt)
+                    alert('Đã phát hiện thấy vi phạm trong thi.');
+
+                } else {
+                    isDebugging = true; // Tiếp tục vòng lặp debugger khi được hiển thị lại
+                    // Lời nhắc người dùng khi quay lại
+                    console.log("Trở lại bài thi. Giám sát đang tiếp tục.");
                 }
             });
 
-            // Liên tục gọi debugger
+            // Liên tục gọi debugger (Kỹ thuật chống DevTools)
             (function continuousDebugger() {
-                if (window.outerWidth - window.innerWidth > 100 || window.outerHeight - window.innerHeight > 100) {
-                     sendViolationLog_Direct('DEVTOOLS_SIZE_DETECTED', 'Phát hiện cửa sổ DevTools đang mở.');
+                // Kiểm tra nếu trang bị ẩn, dừng vòng lặp (isDebugging = false)
+                if (!isDebugging && document.hidden) {
+                    setTimeout(continuousDebugger, 1000); 
+                    return;
                 }
+                
+                // Phát hiện DevTools bằng kích thước cửa sổ
+                if (window.outerWidth - window.innerWidth > 100 || window.outerHeight - window.innerHeight > 100) {
+                     sendViolationLog_Direct('DEVTOOL_SIZE_DETECTED', 'Phát hiện cửa sổ DevTools đang mở.');
+                }
+                
+                // Lệnh debugger: sẽ tạm dừng mã nếu DevTools mở
                 debugger; 
+                
                 setTimeout(continuousDebugger, 100); 
             })();
+            isDebugging = true; // Bắt đầu vòng lặp debugger
         }
 
         // ----------------------------------------------------
